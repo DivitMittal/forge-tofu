@@ -11,7 +11,7 @@ Terragrunt DRYs up the backend configuration and provider generation across orgs
 ## STRUCTURE
 ```
 ./
-├── terragrunt.hcl               # root: remote_state (local backend) + generate "versions"
+├── root.hcl                     # root: remote_state (local backend) + generate "versions"
 ├── orgs/
 │   ├── DivitMittal/             # Terragrunt unit for github.com/DivitMittal
 │   │   ├── terragrunt.hcl       # include root + generate "provider" + inputs (token)
@@ -41,7 +41,7 @@ Terragrunt DRYs up the backend configuration and provider generation across orgs
 | Add branch protection rules | Same `locals.tf` as repos | Edit `protected_branches` map |
 | Repo resource behaviour | `modules/repositories/main.tf` | prevent-destroy, auto-init ignores |
 | Branch protection rules | `modules/branch-protection/main.tf` | Uniform rule set |
-| Terragrunt backend/versions | `terragrunt.hcl` (root) | Inherited by all org units |
+| Terragrunt backend/versions | `root.hcl` | Inherited by all org units |
 | Org provider + token | `orgs/<org>/terragrunt.hcl` | generate "provider" + inputs |
 | State migration/imports | `orgs/<org>/main.tf` | `import` blocks |
 | Nix devshell/formatters | `flake/devshells.nix`, `flake/formatters.nix` | Terraform + Terragrunt + Nix tooling |
@@ -94,4 +94,4 @@ nix run .#render-workflows
 ## NOTES
 - State files live at `orgs/<org>/terraform.tfstate` (local backend).
 - Terragrunt generates `backend.tf`, `versions.tf`, and `provider.tf` in each org directory at init/plan time. These are `.terraformignore`-d automatically.
-- To switch to a remote backend (e.g. GCS), update `remote_state` in the root `terragrunt.hcl` only — all orgs inherit it.
+- To switch to a remote backend (e.g. GCS), update `remote_state` in `root.hcl` only — all orgs inherit it.
