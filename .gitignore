@@ -30,6 +30,12 @@ crash.*.log
 *.tfvars.json
 !example.tfvars
 
+## Secrets
+# Per-machine env files (Cloudflare R2 keys, GitHub PATs, etc.) — NEVER commit.
+.envrc.local
+.env
+.env.local
+
 ## Operating System Specific
 # macOS
 .DS_Store
@@ -41,3 +47,4 @@ crash.*.log
 ## Tools
 .serena/
 *local.json
+.wrangler/
