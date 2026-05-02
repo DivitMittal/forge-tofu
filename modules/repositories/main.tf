@@ -13,7 +13,8 @@ resource "github_repository" "repos" {
   # Delete merged PR branches automatically — good hygiene for active repos.
   delete_branch_on_merge = each.value.delete_branch_on_merge
 
-  topics = each.value.topics
+  topics       = each.value.topics
+  homepage_url = try(each.value.homepage_url, null)
 
   # Enable Dependabot alerts for public repos.
   vulnerability_alerts = each.value.visibility == "public" ? true : false
