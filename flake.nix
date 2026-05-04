@@ -40,5 +40,12 @@
         git-hooks.follows = "git-hooks";
       };
     };
+    terranix = {
+      url = "github:terranix/terranix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+      };
+    };
   };
 }
