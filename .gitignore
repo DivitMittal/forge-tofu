@@ -6,6 +6,7 @@
 backend.tf
 versions.tf
 provider.tf
+locals.tf.json
 
 ## Terraform
 # Terraform state — never commit
