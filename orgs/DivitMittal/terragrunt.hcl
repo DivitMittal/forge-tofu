@@ -16,6 +16,22 @@ generate "provider" {
   EOF
 }
 
+# Materialise `locals.tf.json` from the terranix module at
+# `terranix/orgs/DivitMittal.nix`. The nix store output is built once per
+# terragrunt invocation (`--terragrunt-global-cache`) and inlined here.
+# Edit the .nix file, not this file or any `locals.tf.json` on disk.
+generate "locals" {
+  path              = "locals.tf.json"
+  if_exists         = "overwrite"
+  disable_signature = true
+  contents = run_cmd(
+    "--terragrunt-quiet",
+    "--terragrunt-global-cache",
+    "sh", "-c",
+    "nix build --no-link --print-out-paths '${get_repo_root()}#divitmittal-locals' | xargs cat",
+  )
+}
+
 inputs = {
   github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", ""))
 }
