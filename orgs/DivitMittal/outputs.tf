@@ -13,11 +13,6 @@ output "archived_repos" {
   value       = module.repositories.archived_repos
 }
 
-output "protected_branch_rules" {
-  description = "Applied branch protection patterns keyed by repo."
-  value       = module.branch_protection.protected_branch_rules
-}
-
 output "repo_count" {
   description = "Total number of managed repositories."
   value       = module.repositories.repo_count
