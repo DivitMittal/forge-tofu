@@ -4,12 +4,13 @@ locals {
   # For repos that already exist on GitHub, omit `existing` (defaults to true) and
   # they will be imported. For net-new repos, set `existing = false`.
   repos = {
-    # "my-repo" = {
-    #   description            = "..."
-    #   visibility             = "public"  # or "private"
-    #   topics                 = ["nix"]
-    #   delete_branch_on_merge = true
-    # }
+    ".github" = {
+      description            = "Qezta org profile"
+      visibility             = "public"
+      topics                 = ["profile"]
+      delete_branch_on_merge = true
+      existing               = true
+    }
   }
 
   # Branch protection rules for Qezta repos.
