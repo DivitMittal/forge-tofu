@@ -2,6 +2,13 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
+# Copy the repo root into the Terragrunt cache and run Terraform from this
+# org's subdirectory within it, so that relative module paths (../../modules)
+# resolve correctly.
+terraform {
+  source = "${get_repo_root()}//${path_relative_to_include()}"
+}
+
 # Generate provider with DivitMittal as owner.
 # Token is injected via inputs below — set GITHUB_TOKEN_DIVITMITTAL in env,
 # or fall back to GITHUB_TOKEN.
