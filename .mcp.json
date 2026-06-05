@@ -16,12 +16,9 @@
     },
     "terraform": {
       "type": "stdio",
-      "command": "docker",
+      "command": "terraform-mcp-server",
       "args": [
-        "run",
-        "-i",
-        "--rm",
-        "hashicorp/terraform-mcp-server:0.5.0"
+        "stdio"
       ]
     }
   }

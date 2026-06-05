@@ -28,6 +28,7 @@
             alejandra
             ## CLI tools
             terraform
+            terraform-mcp-server
             terragrunt
             gh # for manual API calls / verification
             ;
