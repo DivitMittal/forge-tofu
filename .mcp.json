@@ -18,7 +18,8 @@
       "type": "stdio",
       "command": "terraform-mcp-server",
       "args": [
-        "stdio"
+        "stdio",
+        "--toolsets=registry"
       ]
     }
   }
