@@ -54,9 +54,9 @@ in {
       topics = ["autoconfig" "betterfox" "css" "firefox" "flake-parts" "flakes" "javascript" "nix" "sideberry" "tridactyl"];
       delete_branch_on_merge = true;
     };
-    "TermEmulator-Cfg" = {
+    "term-nixCfg" = {
       description = "Terminal emulator configurations for OS-nixCfg";
-      homepage_url = "https://deepwiki.com/DivitMittal/TermEmulator-Cfg";
+      homepage_url = "https://deepwiki.com/DivitMittal/term-nixCfg";
       visibility = "public";
       topics = ["flake" "flake-parts" "kitty" "nix" "terminal" "wezterm"];
       delete_branch_on_merge = true;
