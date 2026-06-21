@@ -104,7 +104,7 @@ The second should fail with `Error acquiring the state lock` — confirming R2 c
 
 - Generate Atlantis webhook secret: `openssl rand -hex 32`.
 - Register webhooks in both orgs (`Settings → Webhooks` → URL = tunnel URL + `/events`, content type `application/json`, secret as above, events: pull requests + pushes + issue comments).
-- Open a noop PR (e.g. add a topic to a repo in `terranix/orgs/DivitMittal.nix`) → confirm Atlantis posts a plan comment.
+- Open a noop PR (e.g. add a topic to a repo in `terranix/orgs/<Org>.nix`) → confirm Atlantis posts a plan comment.
 
 ## Image build
 
