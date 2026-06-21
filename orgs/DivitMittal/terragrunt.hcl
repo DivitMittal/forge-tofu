@@ -11,7 +11,7 @@ terraform {
 
 # Generate provider with DivitMittal as owner.
 # Token is injected via inputs below — set GITHUB_TOKEN_DIVITMITTAL in env,
-# or fall back to GITHUB_TOKEN.
+# fall back to GITHUB_TOKEN, then to the logged-in gh CLI token.
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
@@ -40,5 +40,5 @@ generate "locals" {
 }
 
 inputs = {
-  github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", ""))
+  github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
 }
