@@ -1,0 +1,33 @@
+lockfile_version: '1'
+generated_at: '2026-06-21T17:34:05.488793+00:00'
+dependencies: []
+mcp_servers:
+- serena
+- terraform
+mcp_configs:
+  serena:
+    name: serena
+    transport: stdio
+    args:
+    - --from
+    - git+https://github.com/oraios/serena
+    - serena
+    - start-mcp-server
+    - --context
+    - claude-code
+    - --project
+    - ~/Projects/ghOrg-terraform/
+    registry: false
+    command: uvx
+  terraform:
+    name: terraform
+    transport: stdio
+    args:
+    - stdio
+    - --toolsets=registry
+    registry: false
+    command: terraform-mcp-server
+local_deployed_files:
+- .claude/rules/project-knowledge.md
+local_deployed_file_hashes:
+  .claude/rules/project-knowledge.md: sha256:3c3bc1994df0d713e3e8978f871295c0c7fb80163ba00dec58cb47c12d9686fc

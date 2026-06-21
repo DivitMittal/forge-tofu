@@ -1,0 +1,32 @@
+name: ghorgs-terraform
+version: 1.0.0
+description: Terraform + Terragrunt project declaratively managing GitHub organisations (DivitMittal, Qezta) with Nix flake tooling
+author: DivitMittal
+target:
+  - claude
+  - codex
+  - opencode
+type: instructions
+
+dependencies:
+  mcp:
+    - name: serena
+      registry: false
+      transport: stdio
+      command: uvx
+      args:
+        - --from
+        - git+https://github.com/oraios/serena
+        - serena
+        - start-mcp-server
+        - --context
+        - claude-code
+        - --project
+        - ~/Projects/ghOrg-terraform/
+    - name: terraform
+      registry: false
+      transport: stdio
+      command: terraform-mcp-server
+      args:
+        - stdio
+        - --toolsets=registry
