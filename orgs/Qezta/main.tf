@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # Import all existing Qezta repos into state without destroying them.
-# Add repo entries to locals.tf, then:
+# Add repo entries to terranix/orgs/Qezta.nix, then:
 #   terragrunt plan   — preview what will be imported / created
 #   terragrunt apply  — import into state
 # ---------------------------------------------------------------------------

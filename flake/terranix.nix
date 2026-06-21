@@ -6,11 +6,17 @@
 ##
 ## Build manually for inspection:
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
+##   nix build .#qezta-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
   perSystem = {system, ...}: {
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
       inherit system;
       modules = [../terranix/orgs/DivitMittal.nix];
+    };
+
+    packages.qezta-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit system;
+      modules = [../terranix/orgs/Qezta.nix];
     };
   };
 }
