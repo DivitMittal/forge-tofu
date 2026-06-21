@@ -4,6 +4,6 @@ variable "repo_node_ids" {
 }
 
 variable "protected_branches" {
-  description = "Map of repo name to branch protection config. Defined per org in locals.tf and passed in from the root module."
+  description = "Map of repo name to branch protection config. Defined per org in generated locals and passed in from the root module."
   type        = map(object({ branch = string }))
 }
