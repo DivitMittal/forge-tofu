@@ -207,13 +207,6 @@ in {
       topics = ["nextjs" "nix" "reactjs" "shadcn-ui" "tailwindcss"];
       delete_branch_on_merge = true;
     };
-    "mcp-kaggle-tool" = {
-      description = "MCP server for Kaggle API integration - create, run, and manage Kaggle notebooks programmatically";
-      homepage_url = "https://deepwiki.com/DivitMittal/mcp-kaggle-tool";
-      visibility = "public";
-      topics = ["kaggle" "mcp" "mcp-server" "notebooks" "python"];
-      delete_branch_on_merge = true;
-    };
     "AudioResSwitcher-Raycast" = {
       description = "Control audio quality with precision. Switch sample rates, bit depth, and formats for input/output devices. Monitor current bitrate in menubar.";
       homepage_url = "https://deepwiki.com/DivitMittal/AudioResSwitcher-Raycast";
@@ -241,12 +234,19 @@ in {
 
     ## ── Profile / Meta ───────────────────────────────────────────────────────
 
-    "DivitMittal-CV" = {
+    "CV-nixCfg" = {
       description = "Curriculum Vitae — LaTeX source, compiled PDFs, markdown fragments for AI agents, and Claude Code configuration; tooling managed by flake-parts with a Nix devshell providing the TeX Live environment";
-      homepage_url = "https://deepwiki.com/DivitMittal/DivitMittal-CV";
-      visibility = "private";
+      homepage_url = "https://deepwiki.com/DivitMittal/CV-nixCfg";
+      visibility = "public";
       topics = ["claude-code" "cv" "flake-parts" "latex" "markdown" "nix" "pdf" "resume" "texlive"];
       delete_branch_on_merge = true;
+    };
+    "cv-data" = {
+      description = "Personal CV data for DivitMittal/CV-nixCfg";
+      homepage_url = "https://deepwiki.com/DivitMittal/cv-data";
+      visibility = "private";
+      topics = [];
+      delete_branch_on_merge = false;
     };
     "DivitMittal" = {
       description = "Repository to setup GitHub profile.";
@@ -298,6 +298,13 @@ in {
       homepage_url = "https://deepwiki.com/DivitMittal/employee-management";
       visibility = "public";
       topics = ["android" "cross-platform" "dart" "employee-management" "flutter" "ios"];
+      delete_branch_on_merge = false;
+    };
+    "Hulk" = mkArchived {
+      description = "Green or Red, Which one is your one?????";
+      homepage_url = "https://deepwiki.com/DivitMittal/Hulk";
+      visibility = "public";
+      topics = [];
       delete_branch_on_merge = false;
     };
   };
