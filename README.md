@@ -31,16 +31,15 @@
 
 ---
 
-Terraform project that declaratively manages the `DivitMittal` GitHub organization's repositories and branch protections via the [GitHub provider](https://registry.terraform.io/providers/integrations/github/latest). `locals.tf` is the single source of truth for all repository definitions. A [Nix flake](https://github.com/DivitMittal/ghOrg-terraform/blob/main/flake.nix) provides the devshell, formatters, pre-commit hooks, and CI workflow generation.
+Terraform + Terragrunt project that declaratively manages the `DivitMittal` and `Qezta` GitHub organisations' repositories and branch protections via the [GitHub provider](https://registry.terraform.io/providers/integrations/github/latest). `terranix/orgs/<Org>.nix` files are the source of truth for repository definitions. A [Nix flake](https://github.com/DivitMittal/ghOrg-terraform/blob/main/flake.nix) provides the devshell, formatters, pre-commit hooks, Terranix JSON generation, and CI workflow generation.
 
 ## Architecture
 
 ```
 ghOrg-terraform/
-├── main.tf                   # provider config, import & moved blocks, module wiring
-├── locals.tf                 # canonical repos map — edit here to add/modify repos
-├── variables.tf              # github_owner variable
-├── outputs.tf                # delegates to module outputs
+├── root.hcl                  # shared Terragrunt backend/version generation
+├── orgs/                     # per-org Terragrunt units
+├── terranix/orgs/            # canonical org repo maps — edit here
 ├── modules/
 │   ├── repositories/
 │   │   ├── locals.tf         # repo map (passed from root)
@@ -51,13 +50,14 @@ ghOrg-terraform/
 │       ├── variables.tf      # repo_node_ids input
 │       ├── main.tf           # github_branch_protection resource
 │       └── outputs.tf        # protected_branch_rules
-└── flake/                    # Nix: devshell, formatters, pre-commit, CI generation
+└── flake/                    # Nix: devshell, formatters, pre-commit, Terranix, CI generation
     └── actions/              # source for .github/workflows/*.yml
 ```
 
 ### Key Patterns
 
-- **Single source of truth**: all repo definitions live in `locals.tf`; modules and import blocks consume it.
+- **Single source of truth**: all repo definitions live in `terranix/orgs/<Org>.nix`; Terragrunt generates `locals.tf.json` for Terraform.
+- **Fork policy**: fork repositories are intentionally unmanaged; omit forks from Terranix repo maps.
 - **Module wiring**: `repositories` outputs `node_ids`; `branch_protection` receives them via `var.repo_node_ids` — avoids cross-module resource references.
 - **Import blocks** (Terraform ≥ 1.7): pre-existing repos are adopted in-place, never recreated.
 - **`prevent_destroy = true`**: every repository resource is guarded against accidental deletion.
@@ -85,11 +85,12 @@ direnv allow
 ### Common Commands
 
 ```bash
-# Plan changes
-terraform plan
+# Plan changes inside one org
+cd orgs/DivitMittal # or orgs/Qezta
+terragrunt plan
 
 # Apply changes
-terraform apply
+terragrunt apply
 
 # Format all Nix and Terraform files
 nix fmt
@@ -103,27 +104,27 @@ nix run .#render-workflows
 
 ### Adding a New Repository
 
-1. Add an entry to the `repos` map in `locals.tf`:
+1. Add an entry to `locals.repos` in `terranix/orgs/<Org>.nix`:
 
-```hcl
+```nix
 "my-new-repo" = {
-  description            = "What this repo is for"
-  visibility             = "public"
-  topics                 = ["nix", "example"]
-  delete_branch_on_merge = true
-  existing               = false  # omit or set true for pre-existing repos
-}
+  description = "What this repo is for";
+  visibility = "public";
+  topics = ["nix" "example"];
+  delete_branch_on_merge = true;
+  existing = false; # omit or set true for pre-existing repos
+};
 ```
 
 2. If adopting a **pre-existing** repo, add a corresponding `import` block in `main.tf` (or rely on the `for_each` import block for repos where `existing = true`).
 
-3. If branch protection is needed, add the repo + branch to `modules/branch-protection/locals.tf`.
+3. If branch protection is needed, add the repo + branch to `locals.protected_branches` in the same org Terranix file.
 
 4. Verify and apply:
 
 ```bash
-terraform plan
-terraform apply
+terragrunt plan
+terragrunt apply
 ```
 
 ## CI/CD
