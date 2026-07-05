@@ -92,6 +92,22 @@ in {
 
     ## ── AI / Machine Learning ────────────────────────────────────────────────
 
+    "answerci" = {
+      description = "CLI-first, CI-native LLM visibility observability for open-source projects and technical brands.";
+      homepage_url = "https://deepwiki.com/DivitMittal/answerci";
+      visibility = "public";
+      topics = ["answer-engine-optimization" "ci" "generative-engine-optimization" "llm-citation-tracking" "observability" "regression-testing" "rust"];
+      delete_branch_on_merge = true;
+      existing = false;
+    };
+    "citestage" = {
+      description = "A reproducible local generative-search simulator for diagnosing why AI answer engines fail to cite or correctly represent a project.";
+      homepage_url = "https://deepwiki.com/DivitMittal/citestage";
+      visibility = "public";
+      topics = ["citation-analysis" "generative-engine-optimization" "information-retrieval" "llm-citation-tracking" "rag" "rust" "search-simulator"];
+      delete_branch_on_merge = true;
+      existing = false;
+    };
     "DocAssist-LLM" = {
       description = "RAG-enhanced LLaMa-like transformer neural network based LLM for assistance on programming languages/frameworks' documentations.";
       homepage_url = "https://deepwiki.com/DivitMittal/DocAssist-LLM";
