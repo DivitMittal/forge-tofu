@@ -143,13 +143,6 @@ in {
       topics = ["cuda" "deep-learning" "diabetic-retinopathy-detection" "transformer"];
       delete_branch_on_merge = true;
     };
-    "LLM-feeder" = {
-      description = "Multiple-choice questions (MCQs) are parsed, & the question is sent to a Large Language Model (LLM) to obtain an answer";
-      homepage_url = "https://deepwiki.com/DivitMittal/LLM-feeder";
-      visibility = "private";
-      topics = ["llm" "mcq" "nlp" "python" "question-answering"];
-      delete_branch_on_merge = true;
-    };
     "ZestaAds" = {
       description = "Generative AI ad network with personalized, UI-integrated ads via API.";
       homepage_url = "https://deepwiki.com/DivitMittal/ZestaAds";
@@ -229,6 +222,19 @@ in {
       visibility = "public";
       topics = ["audio" "macos" "menubar" "raycast" "raycast-extension" "swift"];
       delete_branch_on_merge = true;
+    };
+    "android-kvm" = {
+      description = "Android KVM setup experiments, configuration notes, and virtualization research.";
+      homepage_url = "https://deepwiki.com/DivitMittal/android-kvm";
+      visibility = "public";
+      topics = [];
+      delete_branch_on_merge = false;
+    };
+    "pedal-thoughtd" = {
+      description = "Capture developer thoughts from a foot pedal over Arduino serial events; Rust daemon owns recording, STT, cleanup, and note writing.";
+      visibility = "private";
+      topics = [];
+      delete_branch_on_merge = false;
     };
 
     ## ── Dotfiles / Sync ──────────────────────────────────────────────────────
