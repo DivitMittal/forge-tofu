@@ -39,6 +39,20 @@ generate "locals" {
   )
 }
 
+locals {
+  actions_secret_sources = {
+    profile_readme_token  = "github/profile_readme.age"
+    awesome_github_token  = "github/awesome_stars.age"
+    awesome_codeberg_token = "codeberg/awesome.age"
+    awesome_gitlab_token   = "gitlab/awesome.age"
+  }
+}
+
 inputs = {
   github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
+
+  github_actions_secret_values = {
+    for name, path in local.actions_secret_sources :
+    name => run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", name, path)
+  }
 }

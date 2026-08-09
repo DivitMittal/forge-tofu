@@ -37,6 +37,29 @@ generate "locals" {
   )
 }
 
+locals {
+  actions_secret_sources = {
+    github                                = "github/general.age"
+    gemini                                = "api/gemini.age"
+    groq                                  = "api/groq.age"
+    hf                                    = "api/hf.age"
+    openrouter                            = "api/openrouter.age"
+    opencode                              = "api/opencode.age"
+    discord                               = "api/discord.age"
+    google_client_id                      = "google/client_id.age"
+    google_client_secret                  = "google/client_secret.age"
+    vercel_token                          = "api/vercel.age"
+    vercel_org_id                         = "vercel/org_id.age"
+    vercel_project_id_qezta_website_divit = "vercel/project_id_qezta_website_divit.age"
+    vercel_project_id_qezta_website_qezta = "vercel/project_id_qezta_website_qezta.age"
+  }
+}
+
 inputs = {
   github_token = get_env("GITHUB_TOKEN_QEZTA", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
+
+  github_actions_secret_values = {
+    for name, path in local.actions_secret_sources :
+    name => run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", name, path)
+  }
 }
