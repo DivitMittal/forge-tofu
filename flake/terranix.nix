@@ -8,14 +8,14 @@
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
 ##   nix build .#qezta-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
-  perSystem = {system, ...}: {
+  perSystem = {pkgs, ...}: {
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
-      inherit system;
+      inherit pkgs;
       modules = [../terranix/orgs/DivitMittal.nix];
     };
 
     packages.qezta-locals = inputs.terranix.lib.terranixConfiguration {
-      inherit system;
+      inherit pkgs;
       modules = [../terranix/orgs/Qezta.nix];
     };
   };
