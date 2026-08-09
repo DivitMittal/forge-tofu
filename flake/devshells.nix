@@ -19,20 +19,22 @@
             ${config.pre-commit.installationScript}
           '';
         };
-        packages = lib.attrsets.attrValues {
-          inherit
-            (pkgs)
-            ### LSPs & Formatters
-            ## Nix
-            nixd
-            alejandra
-            ## CLI tools
-            terraform
-            terraform-mcp-server
-            terragrunt
-            gh # for manual API calls / verification
-            ;
-        };
+        packages =
+          lib.attrsets.attrValues {
+            inherit
+              (pkgs)
+              ### LSPs & Formatters
+              ## Nix
+              nixd
+              alejandra
+              ## CLI tools
+              terraform
+              terraform-mcp-server
+              terragrunt
+              gh # for manual API calls / verification
+              ;
+          }
+          ++ [inputs.agenix.packages.${pkgs.system}.default];
       };
     };
   };
