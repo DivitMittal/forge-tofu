@@ -330,4 +330,28 @@ in {
       delete_branch_on_merge = false;
     };
   };
+
+  locals.actions_environments = {
+    DivitMittal = {
+      "profile-readme" = {
+        existing = false;
+        secrets = {
+          PROFILE_README_TOKEN = "profile_readme_token";
+        };
+        variables = {};
+      };
+    };
+
+    awesome = {
+      "awesome-list" = {
+        existing = false;
+        secrets = {
+          AWESOME_GITHUB_TOKEN = "awesome_github_token";
+          AWESOME_CODEBERG_TOKEN = "awesome_codeberg_token";
+          AWESOME_GITLAB_TOKEN = "awesome_gitlab_token";
+        };
+        variables = {};
+      };
+    };
+  };
 }
