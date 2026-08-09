@@ -3,21 +3,29 @@
 
   outputs = inputs: let
     inherit (inputs.flake-parts.lib) mkFlake;
+    isX86Darwin = system: system == "x86_64-darwin";
   in
     mkFlake {inherit inputs;} ({inputs, ...}: {
       systems = import inputs.systems;
       imports = [(inputs.import-tree ./flake)];
       perSystem = {system, ...}: {
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true; ## Terraform is BSL Licensed
-        };
+        _module.args.pkgs =
+          import (
+            if isX86Darwin system
+            then inputs."nixpkgs-2605"
+            else inputs.nixpkgs
+          ) {
+            inherit system;
+            config.allowUnfree = true; ## Terraform is BSL Licensed
+          };
       };
     });
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    "nixpkgs-2605".url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     import-tree.url = "github:vic/import-tree";
+    agenix.url = "github:ryantm/agenix";
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
     devshell = {
