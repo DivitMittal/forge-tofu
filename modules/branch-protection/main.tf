@@ -4,7 +4,7 @@
 # repositories module output) to avoid a cross-module resource reference.
 #
 # If any protection already exists, import it with:
-#   terraform import 'module.branch_protection.github_branch_protection.active_repos["OS-nixCfg"]' OS-nixCfg:master
+#   terraform import 'module.branch_protection.github_branch_protection.active_repos["infra-nixCfg"]' infra-nixCfg:master
 # ---------------------------------------------------------------------------
 resource "github_branch_protection" "active_repos" {
   for_each = local.protected_branches

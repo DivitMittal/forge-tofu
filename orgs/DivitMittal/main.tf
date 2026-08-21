@@ -31,6 +31,16 @@ import {
 }
 
 # ---------------------------------------------------------------------------
+# infra-nixCfg rename: repo previously tracked as "OS-nixCfg". Without this,
+# Terraform sees a for_each key change as destroy+create instead of the
+# in-place `name` update the GitHub provider actually supports.
+# ---------------------------------------------------------------------------
+moved {
+  from = module.repositories.github_repository.repos["OS-nixCfg"]
+  to   = module.repositories.github_repository.repos["infra-nixCfg"]
+}
+
+# ---------------------------------------------------------------------------
 # Modules
 # ---------------------------------------------------------------------------
 module "repositories" {
