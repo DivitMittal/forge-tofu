@@ -6,6 +6,7 @@
 ##
 ## Build manually for inspection:
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
+##   nix build .#divitmittal-gitea-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
   # Pass the perSystem pkgs (nixpkgs-26.05-darwin on x86_64-darwin) rather than
   # `system`, which would make terranix import its own nixpkgs input.
@@ -13,6 +14,26 @@
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
       inherit pkgs;
       modules = [../terranix/orgs/DivitMittal.nix];
+    };
+
+    packages.divitmittal-gitlab-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-GitLab.nix];
+    };
+
+    packages.divitmittal-codeberg-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Codeberg.nix];
+    };
+
+    packages.divitmittal-gitea-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Gitea.nix];
+    };
+
+    packages.divitmittal-sourcehut-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Sourcehut.nix];
     };
   };
 }
