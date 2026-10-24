@@ -244,6 +244,13 @@ in {
       topics = [];
       delete_branch_on_merge = false;
     };
+    "wled-assitant" = {
+      description = "ESP32-S3 WLED desk ambient light: stock WLED v16.0.1 + usermod for TXS0108E OE, HTU21D and MQTT/HA, with HyperHDR Adalight over native USB";
+      homepage_url = "https://deepwiki.com/DivitMittal/wled-assitant";
+      visibility = "public";
+      topics = ["adalight" "esp32-s3" "flake-parts" "home-assistant" "hyperhdr" "nix" "platformio" "wled"];
+      delete_branch_on_merge = true;
+    };
 
     ## ── Dotfiles / Sync ──────────────────────────────────────────────────────
 
