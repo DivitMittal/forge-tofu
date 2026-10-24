@@ -7,6 +7,7 @@
 ## Build manually for inspection:
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
 ##   nix build .#qezta-locals --print-out-paths | xargs cat | jq
+##   nix build .#divitmittal-gitea-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
   perSystem = {pkgs, ...}: {
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
@@ -17,6 +18,41 @@
     packages.qezta-locals = inputs.terranix.lib.terranixConfiguration {
       inherit pkgs;
       modules = [../terranix/orgs/Qezta.nix];
+    };
+
+    packages.divitmittal-gitlab-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-GitLab.nix];
+    };
+
+    packages.qezta-gitlab-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/Qezta-GitLab.nix];
+    };
+
+    packages.divitmittal-codeberg-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Codeberg.nix];
+    };
+
+    packages.qezta-codeberg-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/Qezta-Codeberg.nix];
+    };
+
+    packages.divitmittal-gitea-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Gitea.nix];
+    };
+
+    packages.divitmittal-sourcehut-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/DivitMittal-Sourcehut.nix];
+    };
+
+    packages.qezta-sourcehut-locals = inputs.terranix.lib.terranixConfiguration {
+      inherit pkgs;
+      modules = [../terranix/orgs/Qezta-Sourcehut.nix];
     };
   };
 }
