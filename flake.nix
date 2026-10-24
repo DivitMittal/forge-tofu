@@ -1,5 +1,5 @@
 {
-  description = "{project-name} flake";
+  description = "forge-tofu flake";
 
   outputs = inputs: let
     inherit (inputs.flake-parts.lib) mkFlake;
@@ -16,7 +16,6 @@
             else inputs.nixpkgs
           ) {
             inherit system;
-            config.allowUnfree = true; ## Terraform is BSL Licensed
           };
       };
     });
