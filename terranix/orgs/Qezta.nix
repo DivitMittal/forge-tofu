@@ -28,6 +28,13 @@ _: {
       topics = [];
       delete_branch_on_merge = false;
     };
+    "ssh" = {
+      description = "ssh divit@qezta.com — SSH terminal portfolio mirroring divit.qezta.com, built on wish + Bubble Tea";
+      visibility = "public";
+      topics = ["ssh" "tui" "go" "bubbletea" "wish"];
+      delete_branch_on_merge = false;
+      existing = false;
+    };
     "ui" = {
       description = "Shared Svelte component library and design system for Qezta org sub-products";
       visibility = "public";
