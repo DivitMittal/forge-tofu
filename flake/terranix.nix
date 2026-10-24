@@ -8,6 +8,8 @@
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
 ##   nix build .#qezta-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
+  # Pass the perSystem pkgs (nixpkgs-26.05-darwin on x86_64-darwin) rather than
+  # `system`, which would make terranix import its own nixpkgs input.
   perSystem = {pkgs, ...}: {
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
       inherit pkgs;
