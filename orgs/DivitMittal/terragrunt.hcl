@@ -41,10 +41,10 @@ generate "locals" {
 
 locals {
   actions_secret_sources = {
-    profile_readme_token  = "github/profile_readme.age"
-    awesome_github_token  = "github/awesome_stars.age"
-    awesome_codeberg_token = "codeberg/awesome.age"
-    awesome_gitlab_token   = "gitlab/awesome.age"
+    profile_readme_token   = "forge/github/profile_readme.age"
+    awesome_github_token   = "forge/github/awesome_stars.age"
+    awesome_codeberg_token = "forge/codeberg/awesome.age"
+    awesome_gitlab_token   = "forge/gitlab/awesome.age"
   }
 }
 
