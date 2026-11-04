@@ -5,8 +5,8 @@
         <a href='https://github.com/DivitMittal/ghOrg-terraform'>
             <img src='https://img.shields.io/github/repo-size/DivitMittal/ghOrg-terraform?&style=for-the-badge&logo=github'>
         </a>
-        <a href='https://github.com/DivitMittal/ghOrg-terraform/blob/main/LICENSE'>
-            <img src='https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=MIT&logo=unlicense'/>
+        <a href='https://github.com/DivitMittal/forge-tofu/blob/main/LICENSE'>
+            <img src='https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=HONCL--1.0&logo=unlicense'/>
         </a>
         <a href='https://github.com/DivitMittal/ghOrg-terraform'>
             <img src='https://img.shields.io/badge/Terraform-%3E%3D1.7-623CE4?style=for-the-badge&logo=terraform'/>
