@@ -22,3 +22,8 @@ output "repo_count" {
   description = "Total number of managed repositories."
   value       = module.repositories.repo_count
 }
+
+output "write_workflow_repos" {
+  description = "Repos whose GITHUB_TOKEN defaults to write access (should stay short)."
+  value       = module.repositories.write_workflow_repos
+}

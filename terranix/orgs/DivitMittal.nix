@@ -4,7 +4,9 @@
 ## DivitMittal repo list — edit here, then run `terragrunt plan`.
 ##
 ## Schema (per repo): description, homepage_url, visibility, topics,
-## delete_branch_on_merge. Optional: archived, has_issues, existing.
+## delete_branch_on_merge. Optional: archived, has_issues, existing,
+## workflow_permissions ("read" default | "write"), actions_can_create_prs
+## (default true).
 ## Sparse maps are intentional — the consuming module uses `try(...)` for
 ## absent keys, so omit fields that should fall back to their defaults.
 _: let
@@ -223,6 +225,8 @@ in {
       visibility = "public";
       topics = ["nextjs" "nix" "reactjs" "shadcn-ui" "tailwindcss"];
       delete_branch_on_merge = true;
+      ## gen-sitemap.yml pushes commits without declaring `permissions:`.
+      workflow_permissions = "write";
     };
     "AudioResSwitcher-Raycast" = {
       description = "Control audio quality with precision. Switch sample rates, bit depth, and formats for input/output devices. Monitor current bitrate in menubar.";

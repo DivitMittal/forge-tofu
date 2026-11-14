@@ -22,6 +22,8 @@ _: {
       visibility = "public";
       topics = ["flake-parts" "nix" "personal-website" "qezta" "svelte" "typescript" "vercel" "vercel-deployment" "vite"];
       delete_branch_on_merge = false;
+      ## gen-sitemap.yml pushes commits without declaring `permissions:`.
+      workflow_permissions = "write";
     };
     "site" = {
       description = "qezta.com: marketing site for Qezta";
