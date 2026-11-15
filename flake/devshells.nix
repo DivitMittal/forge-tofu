@@ -12,7 +12,7 @@
   }: {
     devshells.default = {
       devshell = rec {
-        name = "ghOrg-terraform";
+        name = "forge-tofu";
         motd = "{202}Welcome to {91}${name} {202}devshell!{reset} \n $(menu)";
         startup = {
           git-hooks.text = ''
@@ -28,7 +28,7 @@
               nixd
               alejandra
               ## CLI tools
-              terraform
+              opentofu
               terraform-mcp-server
               terragrunt
               gh # for manual API calls / verification
