@@ -1,49 +1,23 @@
 # ---------------------------------------------------------------------------
-# Import all existing Qezta repos into state without destroying them.
-# Add repo entries to terranix/orgs/Qezta.nix, then:
-#   terragrunt plan   — preview what will be imported / created
-#   terragrunt apply  — import into state
+# Qezta GitHub management has moved to github.com/Qezta/infra (2026-11).
+#
+# This unit exists only to make OpenTofu *forget* the resources it used to
+# manage, without destroying anything on GitHub. Run `terragrunt plan` and
+# confirm every resource says "will no longer be managed", then apply once.
+# After that apply this whole unit can be deleted.
 # ---------------------------------------------------------------------------
-import {
-  for_each = { for k, v in local.repos : k => v if try(v.existing, true) }
-  to       = module.repositories.github_repository.repos[each.key]
-  id       = each.key
+removed {
+  from = module.repositories.github_repository.repos
+
+  lifecycle {
+    destroy = false
+  }
 }
 
-# ---------------------------------------------------------------------------
-# Modules
-# ---------------------------------------------------------------------------
-module "repositories" {
-  source = "../../modules/repositories"
-  repos  = local.repos
-}
+removed {
+  from = module.repositories.github_workflow_repository_permissions.repos
 
-locals {
-  actions_environment_import_ids = merge(concat([{}], [
-    for repo, environments in try(local.actions_environments, {}) : {
-      for environment, config in environments : "${repo}:${environment}" => "${repo}:${environment}"
-      if try(config.existing, true)
-    }
-  ])...)
-}
-
-import {
-  for_each = local.actions_environment_import_ids
-  to       = module.actions_environments.github_repository_environment.environments[each.key]
-  id       = each.value
-}
-
-module "actions_environments" {
-  source = "../../modules/actions-environments"
-
-  environments  = try(local.actions_environments, {})
-  secret_values = var.github_actions_secret_values
-
-  depends_on = [module.repositories]
-}
-
-module "branch_protection" {
-  source             = "../../modules/branch-protection"
-  repo_node_ids      = module.repositories.node_ids
-  protected_branches = local.protected_branches
+  lifecycle {
+    destroy = false
+  }
 }
