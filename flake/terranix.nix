@@ -6,7 +6,6 @@
 ##
 ## Build manually for inspection:
 ##   nix build .#divitmittal-locals --print-out-paths | xargs cat | jq
-##   nix build .#qezta-locals --print-out-paths | xargs cat | jq
 {inputs, ...}: {
   # Pass the perSystem pkgs (nixpkgs-26.05-darwin on x86_64-darwin) rather than
   # `system`, which would make terranix import its own nixpkgs input.
@@ -14,11 +13,6 @@
     packages.divitmittal-locals = inputs.terranix.lib.terranixConfiguration {
       inherit pkgs;
       modules = [../terranix/orgs/DivitMittal.nix];
-    };
-
-    packages.qezta-locals = inputs.terranix.lib.terranixConfiguration {
-      inherit pkgs;
-      modules = [../terranix/orgs/Qezta.nix];
     };
   };
 }

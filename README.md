@@ -31,7 +31,7 @@
 
 ---
 
-Terraform + Terragrunt project that declaratively manages the `DivitMittal` and `Qezta` GitHub organisations' repositories and branch protections via the [GitHub provider](https://registry.terraform.io/providers/integrations/github/latest). `terranix/orgs/<Org>.nix` files are the source of truth for repository definitions. A [Nix flake](https://github.com/DivitMittal/ghOrg-terraform/blob/main/flake.nix) provides the devshell, formatters, pre-commit hooks, Terranix JSON generation, and CI workflow generation.
+Terraform + Terragrunt project that declaratively manages the `DivitMittal` GitHub organisation's repositories and branch protections (Qezta moved to [Qezta/infra](https://github.com/Qezta/infra)) via the [GitHub provider](https://registry.terraform.io/providers/integrations/github/latest). `terranix/orgs/<Org>.nix` files are the source of truth for repository definitions. A [Nix flake](https://github.com/DivitMittal/ghOrg-terraform/blob/main/flake.nix) provides the devshell, formatters, pre-commit hooks, Terranix JSON generation, and CI workflow generation.
 
 ## Architecture
 
@@ -86,7 +86,7 @@ direnv allow
 
 ```bash
 # Plan changes inside one org
-cd orgs/DivitMittal # or orgs/Qezta
+cd orgs/DivitMittal
 terragrunt plan
 
 # Apply changes
