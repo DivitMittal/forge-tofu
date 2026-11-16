@@ -8,7 +8,7 @@ applyTo: "**"
 **Generated:** 2026-04-02 IST | **Branch:** main
 
 ## OVERVIEW
-Terraform + Terragrunt project that declaratively manages multiple GitHub organisations (DivitMittal, Qezta) with the GitHub provider, plus a Nix flake for tooling and CI generation. Terragrunt DRYs up the backend configuration and provider generation across orgs.
+Terraform + Terragrunt project that declaratively manages the DivitMittal GitHub organisation (Qezta moved to github.com/Qezta/infra in 2026-11) with the GitHub provider, plus a Nix flake for tooling and CI generation. Terragrunt DRYs up the backend configuration and provider generation across orgs.
 
 ## STRUCTURE
 ```
@@ -21,11 +21,9 @@ Terraform + Terragrunt project that declaratively manages multiple GitHub organi
 │   │   ├── variables.tf         # github_token variable
 │   │   ├── outputs.tf
 │   │   └── terraform.tfstate    # local state (do not edit manually)
-│   └── Qezta/                   # Terragrunt unit for github.com/Qezta
 ├── terranix/
 │   └── orgs/
-│       ├── DivitMittal.nix      # canonical repos map for DivitMittal (Nix → JSON)
-│       └── Qezta.nix            # canonical repos map for Qezta (Nix → JSON)
+│       └── DivitMittal.nix      # canonical repos map for DivitMittal (Nix → JSON)
 ├── modules/
 │   ├── repositories/            # github_repository resources + validation
 │   └── branch-protection/       # github_branch_protection
@@ -37,13 +35,11 @@ Terraform + Terragrunt project that declaratively manages multiple GitHub organi
 | Task | Location | Notes |
 |------|----------|-------|
 | Add/modify DivitMittal repos | `terranix/orgs/DivitMittal.nix` | Edit `locals.repos` (Nix attrset). Compiles to `locals.tf.json` at terragrunt init/plan/apply. |
-| Add/modify Qezta repos | `terranix/orgs/Qezta.nix` | Edit `locals.repos` (Nix attrset). |
 | Add branch protection rules | Same org terranix file as repos | Edit `locals.protected_branches` map |
 | Terranix flake plumbing | `flake/terranix.nix` | Exposes `packages.<system>.<org>-locals` derivations |
 
 ## TOKENS
 - **DivitMittal**: `GITHUB_TOKEN_DIVITMITTAL` env var (falls back to `GITHUB_TOKEN`)
-- **Qezta**: `GITHUB_TOKEN_QEZTA` env var (falls back to `GITHUB_TOKEN`)
 - Tokens must have `repo` + `admin:org` scopes.
 
 ## CONVENTIONS
@@ -65,7 +61,7 @@ Terraform + Terragrunt project that declaratively manages multiple GitHub organi
 ```bash
 nix develop
 
-cd orgs/DivitMittal   # or orgs/Qezta
+cd orgs/DivitMittal
 terragrunt init
 terragrunt plan
 terragrunt apply

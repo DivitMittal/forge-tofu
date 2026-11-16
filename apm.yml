@@ -1,6 +1,6 @@
 name: ghorgs-terraform
 version: 1.0.0
-description: Terraform + Terragrunt project declaratively managing GitHub organisations (DivitMittal, Qezta) with Nix flake tooling
+description: Terraform + Terragrunt project declaratively managing the DivitMittal GitHub organisation with Nix flake tooling
 author: DivitMittal
 target:
   - claude
