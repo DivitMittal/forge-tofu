@@ -20,10 +20,10 @@ in {
     ## ── Nix / Infrastructure ─────────────────────────────────────────────────
 
     "forge-tofu" = {
-      description = "Terraform project that declaratively manages the DivitMittal GitHub organization's repositories and branch protections via the GitHub provider";
+      description = "OpenTofu + Terragrunt project that declaratively manages repositories, branch protections, and Actions environments across GitHub, GitLab, Codeberg, gitea.com, and SourceHut";
       homepage_url = "https://deepwiki.com/DivitMittal/forge-tofu";
       visibility = "public";
-      topics = ["flake-parts" "github" "nix" "terraform" "terragrunt"];
+      topics = ["codeberg" "flake-parts" "gitea" "github" "gitlab" "infrastructure-as-code" "nix" "opentofu" "sourcehut" "terragrunt" "terranix"];
       delete_branch_on_merge = true;
     };
     "infra-nixCfg" = {
@@ -120,14 +120,14 @@ in {
       description = "RAG-enhanced LLaMa-like transformer neural network based LLM for assistance on programming languages/frameworks' documentations.";
       homepage_url = "https://deepwiki.com/DivitMittal/DocAssist-LLM";
       visibility = "public";
-      topics = ["artifical-intelligense" "deep-learning" "flake-parts" "llama" "llm" "nix" "pytorch" "rag" "transformers"];
+      topics = ["artificial-intelligence" "deep-learning" "flake-parts" "llama" "llm" "nix" "pytorch" "rag" "transformers"];
       delete_branch_on_merge = true;
     };
     "CARLA-Autonomous-Driving" = {
       description = "Via high-fidelity CARLA vehicle simulator & deep semantic segmentation, data from RGBA cameras and LiDAR sensors are combined to achieve comprehensive environmental awareness";
       homepage_url = "https://deepwiki.com/DivitMittal/CARLA-Autonomous-Driving";
       visibility = "public";
-      topics = ["autonoumous-driving" "carla-simulator" "deep-learning" "pygame" "semantic-segmentation"];
+      topics = ["autonomous-driving" "carla-simulator" "deep-learning" "pygame" "semantic-segmentation"];
       delete_branch_on_merge = true;
     };
     "Driver-Drowsiness-Detection" = {
@@ -232,16 +232,17 @@ in {
       delete_branch_on_merge = true;
     };
     "android-kvm" = {
-      description = "Android KVM setup experiments, configuration notes, and virtualization research.";
+      description = "USB Android software KVM for sharing a Mac's keyboard and mouse with an Android device, backed by scrcpy";
       homepage_url = "https://deepwiki.com/DivitMittal/android-kvm";
       visibility = "public";
-      topics = [];
+      topics = ["android" "flake-parts" "kvm" "nix" "rust" "scrcpy" "software-kvm" "usb"];
       delete_branch_on_merge = false;
     };
     "pedal-thoughtd" = {
       description = "Capture developer thoughts from a foot pedal over Arduino serial events; Rust daemon owns recording, STT, cleanup, and note writing.";
+      homepage_url = "https://deepwiki.com/DivitMittal/pedal-thoughtd";
       visibility = "private";
-      topics = [];
+      topics = ["arduino" "developer-productivity" "foot-pedal" "local-first" "nix" "ollama" "rust" "speech-to-text" "whisper"];
       delete_branch_on_merge = false;
     };
 
@@ -251,7 +252,7 @@ in {
       description = "~/.* (Windows)";
       homepage_url = "https://deepwiki.com/DivitMittal/sync-windows";
       visibility = "public";
-      topics = ["dotfiles" "dotfiles-windows" "flake-parts" "nix" "powershell" "windows-10" "windows-11" "flake-parts" "flakes" "nix"];
+      topics = ["dotfiles" "dotfiles-windows" "flake-parts" "flakes" "nix" "powershell" "windows-10" "windows-11"];
       delete_branch_on_merge = false;
     };
     "playbooks-4-windows" = {
@@ -265,7 +266,7 @@ in {
     ## ── Profile / Meta ───────────────────────────────────────────────────────
 
     "CV-nixCfg" = {
-      description = "Curriculum Vitae — LaTeX source, compiled PDFs, markdown fragments for AI agents, and Claude Code configuration; tooling managed by flake-parts with a Nix devshell providing the TeX Live environment";
+      description = "Curriculum Vitae: LaTeX source, compiled PDFs, markdown fragments for AI agents, and Claude Code configuration; tooling managed by flake-parts with a Nix devshell providing the TeX Live environment";
       homepage_url = "https://deepwiki.com/DivitMittal/CV-nixCfg";
       visibility = "public";
       topics = ["claude-code" "cv" "flake-parts" "latex" "markdown" "nix" "pdf" "resume" "texlive"];
@@ -275,7 +276,7 @@ in {
       description = "Personal CV data for DivitMittal/CV-nixCfg";
       homepage_url = "https://deepwiki.com/DivitMittal/cv-data";
       visibility = "private";
-      topics = [];
+      topics = ["cv" "europass" "latex" "resume"];
       delete_branch_on_merge = false;
     };
     "DivitMittal" = {
@@ -320,7 +321,7 @@ in {
       description = "My first app on GitHub!";
       homepage_url = "https://deepwiki.com/DivitMittal/git-fun";
       visibility = "public";
-      topics = [];
+      topics = ["swift"];
       delete_branch_on_merge = false;
     };
     "employee-management" = mkArchived {
@@ -334,7 +335,7 @@ in {
       description = "Green or Red, Which one is your one?????";
       homepage_url = "https://deepwiki.com/DivitMittal/Hulk";
       visibility = "public";
-      topics = [];
+      topics = ["ios" "swift" "xcode"];
       delete_branch_on_merge = false;
     };
   };
