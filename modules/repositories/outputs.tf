@@ -22,3 +22,8 @@ output "repo_count" {
   description = "Total number of managed repositories."
   value       = length(local.repos)
 }
+
+output "write_workflow_repos" {
+  description = "Repos whose GITHUB_TOKEN defaults to write access (should stay short)."
+  value       = [for k, r in github_workflow_repository_permissions.repos : k if r.default_workflow_permissions == "write"]
+}
