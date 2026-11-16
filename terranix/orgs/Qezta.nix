@@ -6,32 +6,40 @@ _: {
     ".github" = {
       description = "Qezta org profile";
       visibility = "public";
-      topics = ["profile"];
+      topics = ["organization-profile" "profile" "qezta"];
       delete_branch_on_merge = false;
     };
     "divit" = {
-      description = "divit.qezta.com — personal portfolio with Gemini-powered RAG chatbot";
+      description = "divit.qezta.com: personal portfolio with Gemini-powered RAG chatbot";
+      homepage_url = "https://divit.qezta.com";
       visibility = "public";
-      topics = [];
+      topics = ["gemini" "personal-website" "portfolio" "qezta" "rag" "svelte" "sveltekit" "typescript" "vercel"];
       delete_branch_on_merge = false;
     };
     "qezta-website" = {
       description = "Qezta Website";
       homepage_url = "https://www.Qezta.com";
       visibility = "public";
-      topics = ["flake-parts" "nix" "personal-website" "svelte" "typescript" "vercel-deployment" "vite"];
+      topics = ["flake-parts" "nix" "personal-website" "qezta" "svelte" "typescript" "vercel" "vercel-deployment" "vite"];
       delete_branch_on_merge = false;
     };
     "site" = {
-      description = "qezta.com — marketing site for Qezta";
+      description = "qezta.com: marketing site for Qezta";
+      homepage_url = "https://qezta.com";
       visibility = "public";
-      topics = [];
+      topics = ["marketing" "qezta" "svelte" "sveltekit" "typescript" "website"];
+      delete_branch_on_merge = false;
+    };
+    "ssh" = {
+      description = "ssh divit@qezta.com: SSH terminal portfolio mirroring divit.qezta.com, built on wish + Bubble Tea";
+      visibility = "public";
+      topics = ["bubbletea" "go" "portfolio" "qezta" "ssh" "tui" "wish"];
       delete_branch_on_merge = false;
     };
     "ui" = {
       description = "Shared Svelte component library and design system for Qezta org sub-products";
       visibility = "public";
-      topics = [];
+      topics = ["component-library" "design-system" "qezta" "svelte" "typescript"];
       delete_branch_on_merge = false;
     };
   };
