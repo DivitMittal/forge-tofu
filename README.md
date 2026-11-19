@@ -73,7 +73,8 @@ forge-tofu/
 ### Prerequisites
 
 - [Nix](https://nixos.org/) with flakes enabled
-- API tokens for whichever forges you're managing (`GITHUB_TOKEN`, `GITLAB_TOKEN_DIVITMITTAL`, `CODEBERG_TOKEN_DIVITMITTAL`, `GITEA_TOKEN_DIVITMITTAL`, `SOURCEHUT_TOKEN_DIVITMITTAL`; see `.claude/rules/project-knowledge.md` for the full token/fallback matrix)
+- A checkout of `infra-nixCfg-secrets` at `../../Cfgs/infra-nixCfg-secrets` relative to this repo, and its agenix key at `~/.ssh/agenix/id_ed25519` (override with `FORGE_TOFU_SECRETS_REPO` / `FORGE_TOFU_AGE_IDENTITY`). The GitLab, Codeberg, gitea.com and SourceHut tokens are decrypted from `secrets/forge/tofu/*.age`; set `GITLAB_TOKEN_DIVITMITTAL`, `CODEBERG_TOKEN_DIVITMITTAL`, `GITEA_TOKEN_DIVITMITTAL` or `SOURCEHUT_TOKEN_DIVITMITTAL` to use a different token
+- A GitHub token (`GITHUB_TOKEN_DIVITMITTAL`, `GITHUB_TOKEN`, or a `gh auth login` session)
 
 ### Development Environment
 

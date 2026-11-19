@@ -30,9 +30,8 @@ generate "versions" {
   EOF
 }
 
-# Token is injected via inputs below — set GITEA_TOKEN_DIVITMITTAL in env,
-# fall back to GITEA_TOKEN. No CLI-auth fallback (unlike `gh auth token`
-# for GitHub) since Gitea has no equivalent official CLI.
+# Token is injected via inputs below: decrypted from forge/tofu/gitea.age in
+# infra-nixCfg-secrets, unless GITEA_TOKEN_DIVITMITTAL is set in the environment.
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
@@ -59,6 +58,6 @@ generate "locals" {
 }
 
 inputs = {
-  gitea_token = get_env("GITEA_TOKEN_DIVITMITTAL", get_env("GITEA_TOKEN", ""))
+  gitea_token = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_gitea", "forge/tofu/gitea.age", "GITEA_TOKEN_DIVITMITTAL")
   gitea_owner = "DivitMittal"
 }

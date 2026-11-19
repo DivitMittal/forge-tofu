@@ -29,9 +29,8 @@ generate "versions" {
   EOF
 }
 
-# Token is injected via inputs below — set CODEBERG_TOKEN_DIVITMITTAL in env,
-# fall back to CODEBERG_TOKEN. No CLI-auth fallback (unlike `gh auth token`
-# for GitHub) since Codeberg has no equivalent official CLI.
+# Token is injected via inputs below: decrypted from forge/tofu/codeberg.age in
+# infra-nixCfg-secrets, unless CODEBERG_TOKEN_DIVITMITTAL is set in the environment.
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
@@ -58,6 +57,6 @@ generate "locals" {
 }
 
 inputs = {
-  codeberg_token = get_env("CODEBERG_TOKEN_DIVITMITTAL", get_env("CODEBERG_TOKEN", ""))
+  codeberg_token = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_codeberg", "forge/tofu/codeberg.age", "CODEBERG_TOKEN_DIVITMITTAL")
   codeberg_owner = "DivitMittal"
 }

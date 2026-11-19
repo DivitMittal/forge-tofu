@@ -1,5 +1,5 @@
 variable "codeberg_token" {
-  description = "Codeberg (Gitea) API token for the DivitMittal account. Injected by Terragrunt from CODEBERG_TOKEN_DIVITMITTAL or CODEBERG_TOKEN."
+  description = "Codeberg (Gitea) API token for the DivitMittal account. Decrypted by Terragrunt from forge/tofu/codeberg.age, or taken from CODEBERG_TOKEN_DIVITMITTAL when set."
   type        = string
   sensitive   = true
 }

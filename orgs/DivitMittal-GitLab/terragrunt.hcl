@@ -29,9 +29,8 @@ generate "versions" {
   EOF
 }
 
-# Token is injected via inputs below — set GITLAB_TOKEN_DIVITMITTAL in env,
-# fall back to GITLAB_TOKEN. No CLI-auth fallback (unlike `gh auth token`
-# for GitHub) since this repo doesn't assume a `glab` login.
+# Token is injected via inputs below: decrypted from forge/tofu/gitlab.age in
+# infra-nixCfg-secrets, unless GITLAB_TOKEN_DIVITMITTAL is set in the environment.
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
@@ -57,7 +56,7 @@ generate "locals" {
 }
 
 inputs = {
-  gitlab_token = get_env("GITLAB_TOKEN_DIVITMITTAL", get_env("GITLAB_TOKEN", ""))
+  gitlab_token = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_gitlab", "forge/tofu/gitlab.age", "GITLAB_TOKEN_DIVITMITTAL")
 
   # GitLab group namespace ID that owns these projects, once any exist.
   # Leave null to create projects under the authenticated user's personal

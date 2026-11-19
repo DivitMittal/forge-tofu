@@ -1,5 +1,5 @@
 variable "sourcehut_token" {
-  description = "SourceHut OAuth2 PAT for the DivitMittal account. Injected by Terragrunt from SOURCEHUT_TOKEN_DIVITMITTAL or SRHT_TOKEN."
+  description = "SourceHut OAuth2 PAT for the DivitMittal account. Decrypted by Terragrunt from forge/tofu/sourcehut.age, or taken from SOURCEHUT_TOKEN_DIVITMITTAL when set."
   type        = string
   sensitive   = true
 }

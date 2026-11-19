@@ -30,9 +30,8 @@ generate "versions" {
   EOF
 }
 
-# Token is injected via inputs below — set SOURCEHUT_TOKEN_DIVITMITTAL in
-# env, fall back to SRHT_TOKEN (the provider's own conventional env var).
-# No CLI-auth fallback (unlike `gh auth token` for GitHub).
+# Token is injected via inputs below: decrypted from forge/tofu/sourcehut.age in
+# infra-nixCfg-secrets, unless SOURCEHUT_TOKEN_DIVITMITTAL is set in the environment.
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
@@ -58,6 +57,6 @@ generate "locals" {
 }
 
 inputs = {
-  sourcehut_token = get_env("SOURCEHUT_TOKEN_DIVITMITTAL", get_env("SRHT_TOKEN", ""))
-  sourcehut_owner = "DivitMittal"
+  sourcehut_token = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_sourcehut", "forge/tofu/sourcehut.age", "SOURCEHUT_TOKEN_DIVITMITTAL")
+  sourcehut_owner = "divmit" # SourceHut username, without the leading ~
 }

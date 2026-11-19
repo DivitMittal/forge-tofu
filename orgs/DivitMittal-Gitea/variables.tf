@@ -1,5 +1,5 @@
 variable "gitea_token" {
-  description = "gitea.com API token for the DivitMittal account. Injected by Terragrunt from GITEA_TOKEN_DIVITMITTAL or GITEA_TOKEN."
+  description = "gitea.com API token for the DivitMittal account. Decrypted by Terragrunt from forge/tofu/gitea.age, or taken from GITEA_TOKEN_DIVITMITTAL when set."
   type        = string
   sensitive   = true
 }

@@ -1,5 +1,5 @@
 variable "gitlab_token" {
-  description = "GitLab PAT for the DivitMittal namespace. Injected by Terragrunt from GITLAB_TOKEN_DIVITMITTAL or GITLAB_TOKEN."
+  description = "GitLab PAT for the DivitMittal namespace. Decrypted by Terragrunt from forge/tofu/gitlab.age, or taken from GITLAB_TOKEN_DIVITMITTAL when set."
   type        = string
   sensitive   = true
 }
