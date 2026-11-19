@@ -44,6 +44,7 @@ locals {
     profile_readme_token   = "forge/github/profile_readme.age"
     awesome_github_token   = "forge/github/awesome_stars.age"
     awesome_codeberg_token = "forge/codeberg.age"
+    awesome_gitea_token    = "forge/gitea.age"
     awesome_gitlab_token   = "forge/gitlab.age"
   }
 }
