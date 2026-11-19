@@ -368,6 +368,7 @@ in {
         secrets = {
           AWESOME_GITHUB_TOKEN = "awesome_github_token";
           AWESOME_CODEBERG_TOKEN = "awesome_codeberg_token";
+          AWESOME_GITEA_TOKEN = "awesome_gitea_token";
           AWESOME_GITLAB_TOKEN = "awesome_gitlab_token";
         };
         variables = {};
