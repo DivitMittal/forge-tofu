@@ -31,7 +31,12 @@
               opentofu
               terraform-mcp-server
               terragrunt
-              gh # for manual API calls / verification
+              ## Forge CLIs, one per provider, for manual API calls,
+              ## verification and token minting
+              gh # GitHub
+              glab # GitLab
+              tea # Gitea instances (Codeberg, gitea.com)
+              hut # SourceHut
               ;
           }
           ++ [inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default];
