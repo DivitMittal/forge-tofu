@@ -1,6 +1,70 @@
 lockfile_version: '1'
-generated_at: '2026-06-21T17:34:05.488793+00:00'
+generated_at: '2026-11-20T16:57:40.926443+00:00'
 dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/rules/project-knowledge.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b3fc9ea0b3365b74127b14c0579d6769dd70e63e26a5a79fec08860a0aa463b0
+- kind: uri
+  target: mcp
+  value: serena
+  runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ad1cabdc347a2583a81564ef55245ab5f02d9b8d70492caecd6ab410c1be7ce9
+- kind: uri
+  target: mcp
+  value: terraform
+  runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d21d06312ab9ff600bd3a5e54ee8e36d86cca020f9d39163f408131705775fa0
+- kind: uri
+  target: mcp
+  value: serena
+  runtime: codex
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6d83918a56e776a01374e7c210d9ee5776e4d679e4f02c8429355024d10d61c1
+- kind: uri
+  target: mcp
+  value: terraform
+  runtime: codex
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:78016ad819c669a6e2b1bf45cee3cc633c0eeb38abe07789ef15cf27b1833722
+- kind: uri
+  target: mcp
+  value: serena
+  runtime: opencode
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:93a7849e4f60f9d6e3de2dae757ab253bc8f5e2c1adfcbff6f67cf17f8e4040c
+- kind: uri
+  target: mcp
+  value: terraform
+  runtime: opencode
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0fc8a22030ff341da3ca0ae44bef836922989c0a3beb473877c453db016f7795
 mcp_servers:
 - serena
 - terraform
@@ -16,7 +80,7 @@ mcp_configs:
     - --context
     - claude-code
     - --project
-    - ~/Projects/ghOrg-terraform/
+    - ~/Projects/gh/forge-tofu/
     registry: false
     command: uvx
   terraform:
@@ -27,7 +91,17 @@ mcp_configs:
     - --toolsets=registry
     registry: false
     command: terraform-mcp-server
+mcp_target_servers:
+  claude:
+  - serena
+  - terraform
+  codex:
+  - serena
+  - terraform
+  opencode:
+  - serena
+  - terraform
 local_deployed_files:
 - .claude/rules/project-knowledge.md
 local_deployed_file_hashes:
-  .claude/rules/project-knowledge.md: sha256:3c3bc1994df0d713e3e8978f871295c0c7fb80163ba00dec58cb47c12d9686fc
+  .claude/rules/project-knowledge.md: sha256:b3fc9ea0b3365b74127b14c0579d6769dd70e63e26a5a79fec08860a0aa463b0

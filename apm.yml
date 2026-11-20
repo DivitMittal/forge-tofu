@@ -1,6 +1,6 @@
-name: ghorgs-terraform
+name: forge-tofu
 version: 1.0.0
-description: Terraform + Terragrunt project declaratively managing the DivitMittal GitHub organisation with Nix flake tooling
+description: OpenTofu + Terragrunt project declaratively managing DivitMittal repositories across GitHub, GitLab, Codeberg, gitea.com and SourceHut with Nix flake tooling
 author: DivitMittal
 target:
   - claude
@@ -22,7 +22,7 @@ dependencies:
         - --context
         - claude-code
         - --project
-        - ~/Projects/ghOrg-terraform/
+        - ~/Projects/gh/forge-tofu/
     - name: terraform
       registry: false
       transport: stdio
