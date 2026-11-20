@@ -11,6 +11,13 @@ variable "environments" {
     }))
     secrets   = optional(map(string), {})
     variables = optional(map(string), {})
+    # Declared but not yet managed: no age file / value exists yet. Listed in
+    # outputs only; nothing on GitHub is created, changed or deleted for them.
+    pending_secrets   = optional(map(string), {})
+    pending_variables = optional(list(string), [])
+    # Names in `variables` that already exist on GitHub and must be imported
+    # (the provider's create is a POST that fails on an existing variable).
+    existing_variables = optional(list(string), [])
   })))
   default = {}
 }

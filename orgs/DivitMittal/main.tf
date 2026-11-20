@@ -30,6 +30,25 @@ import {
   id       = each.value
 }
 
+# Variables listed in `existing_variables` are adopted too, but only once they
+# are also declared in `variables`: an import needs a matching resource.
+locals {
+  actions_environment_variable_import_ids = merge(concat([{}], flatten([
+    for repo, environments in try(local.actions_environments, {}) : [
+      for environment, config in environments : {
+        for name in try(config.existing_variables, []) : "${repo}:${environment}:${name}" => "${repo}:${environment}:${name}"
+        if contains(keys(try(config.variables, {})), name)
+      }
+    ]
+  ]))...)
+}
+
+import {
+  for_each = local.actions_environment_variable_import_ids
+  to       = module.actions_environments.github_actions_environment_variable.variables[each.key]
+  id       = each.value
+}
+
 # ---------------------------------------------------------------------------
 # infra-nixCfg rename: repo previously tracked as "OS-nixCfg". Without this,
 # Terraform sees a for_each key change as destroy+create instead of the
