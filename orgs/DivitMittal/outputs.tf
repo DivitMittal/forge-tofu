@@ -22,3 +22,8 @@ output "write_workflow_repos" {
   description = "Repos whose GITHUB_TOKEN defaults to write access (should stay short)."
   value       = module.repositories.write_workflow_repos
 }
+
+output "actions_environments_pending" {
+  description = "Actions secrets/variables declared but awaiting an age file or value."
+  value       = module.actions_environments.pending
+}
