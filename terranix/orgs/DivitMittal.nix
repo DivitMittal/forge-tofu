@@ -383,18 +383,14 @@ in {
     "infra-nixCfg" = {
       dev = {
         existing = true;
-        secrets = {
-          ATTIC_TOKEN = "infra_nixcfg_attic_token";
+        # Existing values remain untouched until their encrypted sources exist.
+        secrets.ATTIC_TOKEN = "infra_nixcfg_attic_token";
+        pending_secrets = {
           CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
           PAT = "infra_nixcfg_pat";
           SSH_PRIVATE_KEY = "infra_nixcfg_ssh_private_key";
           TS_OAUTH_CLIENT_ID = "infra_nixcfg_ts_oauth_client_id";
           TS_OAUTH_SECRET = "infra_nixcfg_ts_oauth_secret";
-        };
-        ## Declared but not managed until their age files exist: a source
-        ## without an age file fails the whole plan, so move each entry into
-        ## `secrets` (and its path into terragrunt.hcl) once it is encrypted.
-        pending_secrets = {
           ATTIC_DARWIN_TOKEN = "infra_nixcfg_attic_darwin_token";
         };
         ## Both values are public (an age recipient and a Nix signing key),

@@ -169,3 +169,22 @@ GitHub Actions workflows are **generated from Nix** (`flake/actions/`):
 | ------------------- | --------------------------------------------- | ------------------------------------------------------------------ |
 | `flake-check`       | push/PR touching `flake.nix` or `flake.lock` | Runs `nix flake check`                                             |
 | `flake-lock-update` | weekly schedule                              | Auto-updates Nix inputs via `DeterminateSystems/update-flake-lock` |
+
+### Personal Tailscale CI identity
+
+`DivitMittal/infra-nixCfg` owns the personal tailnet policy and the CI OAuth
+client through its Tailscale provider. This repository owns delivering that
+client's credentials to GitHub; it does not read the networking state.
+
+After applying the tailnet configuration, its `tailscale-personal export-secrets`
+command writes `ci/infra-nixCfg/ts_oauth_client_id.age` and
+`ci/infra-nixCfg/ts_oauth_secret.age` directly into the private secrets checkout.
+Register their recipients in the secrets manifest and commit the encrypted
+files. Then move `TS_OAUTH_CLIENT_ID` and `TS_OAUTH_SECRET` from
+`pending_secrets` to `secrets`, uncomment their two `actions_secret_sources`,
+and review a forge plan before applying. No tailnet administrator credential
+is sent to GitHub, and no shared Terraform state is needed.
+
+Other existing environment secrets remain pending until their encrypted
+sources are available. Pending entries leave existing GitHub values intact
+and do not block unrelated repository plans.

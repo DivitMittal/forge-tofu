@@ -48,15 +48,16 @@ locals {
     awesome_gitlab_token   = "forge/gitlab.age"
 
     # infra-nixCfg `dev` environment. ATTIC_TOKEN is the T2/T3 push token.
-    infra_nixcfg_attic_token        = "homelab/attic-push.age"
-    infra_nixcfg_cachix_auth_token  = "ci/infra-nixCfg/cachix_auth_token.age"
-    infra_nixcfg_pat                = "ci/infra-nixCfg/pat.age"
-    infra_nixcfg_ssh_private_key    = "ci/infra-nixCfg/ssh_private_key.age"
-    infra_nixcfg_ts_oauth_client_id = "ci/infra-nixCfg/ts_oauth_client_id.age"
-    infra_nixcfg_ts_oauth_secret    = "ci/infra-nixCfg/ts_oauth_secret.age"
-    # Pending (see pending_secrets in terranix/orgs/DivitMittal.nix): a listed
-    # source whose age file is missing aborts the plan, so uncomment only after
-    # the file is encrypted.
+    infra_nixcfg_attic_token = "homelab/attic-push.age"
+    # Enable each source only when its age file exists, together with moving
+    # its declaration from pending_secrets to secrets in the Terranix map.
+    # infra_nixcfg_cachix_auth_token  = "ci/infra-nixCfg/cachix_auth_token.age"
+    # infra_nixcfg_pat                = "ci/infra-nixCfg/pat.age"
+    # infra_nixcfg_ssh_private_key    = "ci/infra-nixCfg/ssh_private_key.age"
+    # Tailscale provider outputs are encrypted directly to these two paths by
+    # infra-nixCfg's `nix run .#tailscale-personal -- export-secrets` command.
+    # infra_nixcfg_ts_oauth_client_id = "ci/infra-nixCfg/ts_oauth_client_id.age"
+    # infra_nixcfg_ts_oauth_secret    = "ci/infra-nixCfg/ts_oauth_secret.age"
     # infra_nixcfg_attic_darwin_token = "ci/infra-nixCfg/attic_darwin_token.age"
   }
 }
