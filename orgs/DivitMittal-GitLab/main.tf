@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # Import all existing GitLab projects into state without destroying and
-# re-creating them. Requires Terraform >= 1.7 (for_each import blocks).
+# re-creating them. Requires OpenTofu >= 1.7 (for_each import blocks).
 #
 # The GitLab provider's import ID is the numeric project ID or its full
 # "namespace/path" — not just the project name like GitHub's provider. Once

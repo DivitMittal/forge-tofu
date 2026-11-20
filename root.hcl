@@ -21,14 +21,15 @@ remote_state {
 
 # ---------------------------------------------------------------------------
 # Generate terraform{} so no org unit repeats provider version constraints.
-# Terraform >= 1.10 is required for `use_lockfile = true` on the S3 backend.
+# OpenTofu >= 1.10 is the GitHub unit's floor (for_each import blocks need
+# >= 1.7, plus its state encryption). Non-GitHub units override this block.
 # ---------------------------------------------------------------------------
 generate "versions" {
   path      = "versions.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<-EOF
     terraform {
-      required_version = ">= 1.10" # for_each import blocks + use_lockfile
+      required_version = ">= 1.10" # see comment above
 
       required_providers {
         github = {

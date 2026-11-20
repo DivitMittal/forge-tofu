@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------------
 # Import all existing repos into state without destroying and re-creating them.
-# Requires Terraform >= 1.7 (for_each import blocks).
-# Run once: terragrunt plan  — Terraform shows a read-only import plan.
+# Requires OpenTofu >= 1.7 (for_each import blocks).
+# Run once: terragrunt plan  — OpenTofu shows a read-only import plan.
 # Then:     terragrunt apply — state is populated, no resources recreated.
 # ---------------------------------------------------------------------------
 import {
-  # Only import repos that pre-existed Terraform. Repos with existing = false
-  # are created fresh by Terraform and need no import.
+  # Only import repos that pre-existed forge-tofu. Repos with existing = false
+  # are created fresh by OpenTofu and need no import.
   for_each = { for k, v in local.repos : k => v if try(v.existing, true) }
   to       = module.repositories.github_repository.repos[each.key]
   id       = each.key
@@ -51,7 +51,7 @@ import {
 
 # ---------------------------------------------------------------------------
 # infra-nixCfg rename: repo previously tracked as "OS-nixCfg". Without this,
-# Terraform sees a for_each key change as destroy+create instead of the
+# OpenTofu sees a for_each key change as destroy+create instead of the
 # in-place `name` update the GitHub provider actually supports.
 # ---------------------------------------------------------------------------
 moved {

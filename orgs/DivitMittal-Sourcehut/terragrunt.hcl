@@ -3,7 +3,7 @@ include "root" {
   merge_strategy = "deep"
 }
 
-# Copy the repo root into the Terragrunt cache and run Terraform from this
+# Copy the repo root into the Terragrunt cache and run OpenTofu from this
 # org's subdirectory within it, so that relative module paths (../../modules)
 # resolve correctly.
 terraform {
@@ -12,7 +12,7 @@ terraform {
 
 # Override the root's `versions` generate block: this unit talks to
 # SourceHut, not GitHub, so it needs the wombelix/sourcehut provider instead.
-# That provider's GraphQL backend requires Terraform >= 1.8.
+# That provider's GraphQL backend requires OpenTofu >= 1.8.
 generate "versions" {
   path      = "versions.tf"
   if_exists = "overwrite_terragrunt"

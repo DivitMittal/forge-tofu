@@ -3,7 +3,7 @@ include "root" {
   merge_strategy = "deep"
 }
 
-# Copy the repo root into the Terragrunt cache and run Terraform from this
+# Copy the repo root into the Terragrunt cache and run OpenTofu from this
 # org's subdirectory within it, so that relative module paths (../../modules)
 # resolve correctly.
 terraform {
