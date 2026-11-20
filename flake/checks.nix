@@ -2,6 +2,16 @@
   imports = [inputs.git-hooks.flakeModule];
 
   perSystem = {pkgs, ...}: {
+    checks.github-state-encryption =
+      pkgs.runCommand "github-state-encryption" {
+        nativeBuildInputs = [pkgs.python3 pkgs.opentofu];
+      } ''
+        export HOME="$TMPDIR/home"
+        mkdir -p "$HOME"
+        python3 ${../tests/check-state-encryption.py} ${../orgs/DivitMittal/terragrunt.hcl}
+        touch "$out"
+      '';
+
     pre-commit = {
       check.enable = true;
 

@@ -40,6 +40,7 @@ generate "locals" {
 }
 
 locals {
+  state_migration = get_env("FORGE_TOFU_ALLOW_PLAINTEXT_STATE_MIGRATION", "false") == "true"
   actions_secret_sources = {
     profile_readme_token   = "forge/github/profile_readme.age"
     awesome_github_token   = "forge/github/awesome_stars.age"
@@ -56,14 +57,42 @@ locals {
     # infra_nixcfg_ssh_private_key    = "ci/infra-nixCfg/ssh_private_key.age"
     # Tailscale provider outputs are encrypted directly to these two paths by
     # infra-nixCfg's `nix run .#tailscale-personal -- export-secrets` command.
-    # infra_nixcfg_ts_oauth_client_id = "ci/infra-nixCfg/ts_oauth_client_id.age"
-    # infra_nixcfg_ts_oauth_secret    = "ci/infra-nixCfg/ts_oauth_secret.age"
+    infra_nixcfg_ts_oauth_client_id = "ci/infra-nixCfg/ts_oauth_client_id.age"
+    infra_nixcfg_ts_oauth_secret    = "ci/infra-nixCfg/ts_oauth_secret.age"
     # infra_nixcfg_attic_darwin_token = "ci/infra-nixCfg/attic_darwin_token.age"
   }
 }
 
+generate "encryption" {
+  path      = "encryption.tf"
+  if_exists = "overwrite_terragrunt"
+  contents  = <<-EOF
+    terraform {
+      encryption {
+        key_provider "pbkdf2" "state" {
+          passphrase = var.tofu_state_passphrase
+        }
+        method "aes_gcm" "state" {
+          keys = key_provider.pbkdf2.state
+        }
+        method "unencrypted" "migration" {}
+        state {
+          method = method.aes_gcm.state
+          enforced = ${!local.state_migration}
+          ${local.state_migration ? "fallback { method = method.unencrypted.migration }" : ""}
+        }
+        plan {
+          method = method.aes_gcm.state
+          enforced = true
+        }
+      }
+    }
+  EOF
+}
+
 inputs = {
-  github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
+  tofu_state_passphrase = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_state_passphrase", "forge/tofu/github-state-passphrase.age")
+  github_token          = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
 
   github_actions_secret_values = {
     for name, path in local.actions_secret_sources :

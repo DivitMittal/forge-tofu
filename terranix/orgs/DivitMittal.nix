@@ -384,13 +384,15 @@ in {
       dev = {
         existing = true;
         # Existing values remain untouched until their encrypted sources exist.
-        secrets.ATTIC_TOKEN = "infra_nixcfg_attic_token";
+        secrets = {
+          ATTIC_TOKEN = "infra_nixcfg_attic_token";
+          TS_OAUTH_CLIENT_ID = "infra_nixcfg_ts_oauth_client_id";
+          TS_OAUTH_SECRET = "infra_nixcfg_ts_oauth_secret";
+        };
         pending_secrets = {
           CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
           PAT = "infra_nixcfg_pat";
           SSH_PRIVATE_KEY = "infra_nixcfg_ssh_private_key";
-          TS_OAUTH_CLIENT_ID = "infra_nixcfg_ts_oauth_client_id";
-          TS_OAUTH_SECRET = "infra_nixcfg_ts_oauth_secret";
           ATTIC_DARWIN_TOKEN = "infra_nixcfg_attic_darwin_token";
         };
         ## Both values are public (an age recipient and a Nix signing key),
