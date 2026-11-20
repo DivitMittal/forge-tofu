@@ -1,207 +1,177 @@
 <h1 align='center'>forge-tofu</h1>
+
 <div align='center'>
-    <p></p>
-    <div align='center'>
-        <a href='https://github.com/DivitMittal/forge-tofu'>
-            <img src='https://img.shields.io/github/repo-size/DivitMittal/forge-tofu?&style=for-the-badge&logo=github'>
-        </a>
-        <a href='https://github.com/DivitMittal/forge-tofu/blob/main/LICENSE'>
-            <img src='https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=MIT&logo=unlicense'/>
-        </a>
-        <a href='https://github.com/DivitMittal/forge-tofu'>
-            <img src='https://img.shields.io/badge/OpenTofu-%3E%3D1.10-FFDA18?style=for-the-badge&logo=opentofu'/>
-        </a>
-        <a href='https://registry.terraform.io/providers/integrations/github/latest'>
-            <img src='https://img.shields.io/badge/GitHub_Provider-~%3E6.0-181717?style=for-the-badge&logo=github'/>
-        </a>
-    </div>
+    <a href='https://opentofu.org/'><img src='https://img.shields.io/badge/OpenTofu-%3E%3D1.10-FFDA18?style=for-the-badge&logo=opentofu'/></a>
+    <a href='https://terragrunt.gruntwork.io/'><img src='https://img.shields.io/badge/Terragrunt-run_--all-5C4EE5?style=for-the-badge'/></a>
+    <a href='https://terranix.org/'><img src='https://img.shields.io/badge/Terranix-Nix_→_JSON-5277C3?style=for-the-badge&logo=nixos&logoColor=white'/></a>
     <br>
+    <a href="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-check.yml"><img src="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-check.yml/badge.svg" alt="nix flake check"/></a>
+    <a href="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-lock-update.yml"><img src="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-lock-update.yml/badge.svg" alt="flake.lock update"/></a>
 </div>
 
 ---
 
-<div align='center'>
-    <a href="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-check.yml">
-        <img src="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-check.yml/badge.svg" alt="nix-flake-check"/>
-    </a>
-    <a href="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-lock-update.yml">
-        <img src="https://github.com/DivitMittal/forge-tofu/actions/workflows/flake-lock-update.yml/badge.svg" alt="Update flake.lock"/>
-    </a>
-</div>
+Declarative management of `DivitMittal`'s repositories across **GitHub, GitLab, Codeberg, gitea.com and SourceHut** with OpenTofu and Terragrunt. Repo maps are written in Nix and compiled to OpenTofu JSON by [Terranix](https://terranix.org/). Secrets come from age files at plan time. The GitHub unit also manages Actions environments and keeps its state encrypted.
 
----
+> Qezta's repositories moved to [Qezta/infra](https://github.com/Qezta/infra).
 
-OpenTofu + Terragrunt project that declaratively manages the `DivitMittal` repositories and branch protections across multiple forges: GitHub, GitLab, Codeberg, gitea.com and SourceHut (Qezta moved to [Qezta/infra](https://github.com/Qezta/infra)). `terranix/orgs/<Org>[-<Forge>].nix` files are the source of truth for repository definitions, compiled to OpenTofu JSON by [Terranix](https://terranix.org/). A [Nix flake](https://github.com/DivitMittal/forge-tofu/blob/main/flake.nix) provides the devshell, formatters, pre-commit hooks, Terranix JSON generation, and CI workflow generation.
+## How it fits together
 
-## Architecture
-
-```
-forge-tofu/
-├── root.hcl                          # shared Terragrunt backend/version generation (GitHub, default)
-├── orgs/                             # per-org Terragrunt units
-│   ├── DivitMittal/                  # GitHub: github.com/DivitMittal
-│   ├── DivitMittal-GitLab/           # GitLab: overrides generate blocks for gitlabhq/gitlab
-│   ├── DivitMittal-Codeberg/         # Codeberg: overrides generate blocks for go-gitea/gitea
-│   ├── DivitMittal-Gitea/            # gitea.com: same Gitea provider, different base_url
-│   └── DivitMittal-Sourcehut/        # SourceHut: overrides generate blocks for wombelix/sourcehut
-├── terranix/orgs/                    # canonical org repo maps: edit here, not the generated JSON
-├── modules/
-│   ├── repositories/                 # github_repository resources + validation
-│   ├── branch-protection/            # github_branch_protection
-│   ├── actions-environments/         # github_repository_environment + secrets/variables
-│   ├── repositories-gitlab/          # gitlab_project resources + validation
-│   ├── branch-protection-gitlab/     # gitlab_branch_protection
-│   ├── repositories-gitea/           # gitea_repository resources (Codeberg, gitea.com, or any Gitea instance)
-│   ├── branch-protection-gitea/      # gitea_repository_branch_protection
-│   └── repositories-sourcehut/       # sourcehut_repository resources (no branch-protection support)
-└── flake/                            # devshell, formatters, pre-commit, Terranix, CI generation
-    └── actions/                      # source for .github/workflows/*.yml
+```mermaid
+flowchart LR
+    subgraph src["Source of truth"]
+        nix["terranix/orgs/*.nix"]
+    end
+    subgraph tg["Terragrunt unit · orgs/*"]
+        root["root.hcl<br/>backend + versions"]
+        unit["terragrunt.hcl<br/>provider · locals · inputs"]
+        json["locals.tf.json"]
+        main["main.tf<br/>import blocks + modules"]
+    end
+    secrets[("infra-nixCfg-secrets<br/>*.age")]
+    nix -- "nix build .#*-locals" --> json
+    root --> unit
+    unit --> json --> main
+    secrets -- "scripts/read-actions-secret" --> unit
+    main -- tofu --> forges{{"GitHub · GitLab · Codeberg<br/>gitea.com · SourceHut"}}
 ```
 
-### Key Patterns
+| Unit                    | Provider              | Modules                                                                 | Token override env          |
+| ----------------------- | --------------------- | ----------------------------------------------------------------------- | --------------------------- |
+| `DivitMittal`           | `integrations/github` | `repositories`, `actions-environments`                                  | `GITHUB_TOKEN_DIVITMITTAL`  |
+| `DivitMittal-GitLab`    | `gitlabhq/gitlab`     | `repositories-gitlab`, `branch-protection-gitlab`                       | `GITLAB_TOKEN_DIVITMITTAL`  |
+| `DivitMittal-Codeberg`  | `go-gitea/gitea`      | `repositories-gitea`, `branch-protection-gitea`                         | `CODEBERG_TOKEN_DIVITMITTAL`|
+| `DivitMittal-Gitea`     | `go-gitea/gitea`      | `repositories-gitea`, `branch-protection-gitea` (`base_url` gitea.com)  | `GITEA_TOKEN_DIVITMITTAL`   |
+| `DivitMittal-Sourcehut` | `wombelix/sourcehut`  | `repositories-sourcehut` (SourceHut has no branch protection)           | `SOURCEHUT_TOKEN_DIVITMITTAL`|
 
-- **Single source of truth**: all repo definitions live in `terranix/orgs/<Org>[-<Forge>].nix`; Terragrunt generates `locals.tf.json` for OpenTofu.
-- **Fork policy**: fork repositories are intentionally unmanaged; omit forks from Terranix repo maps.
-- **Module wiring**: `repositories` outputs `node_ids`; `branch_protection` receives them via `var.repo_node_ids` — avoids cross-module resource references.
-- **Import blocks**: pre-existing repos are adopted in-place, never recreated.
-- **`prevent_destroy = true`**: every repository resource, on every forge, is guarded against accidental deletion.
-- **`check` block**: validates all active repos have descriptions before any apply.
-- **Generated CI**: workflows in `.github/workflows/` are rendered from `flake/actions/` — do not edit by hand.
+The GitHub token falls back to `GITHUB_TOKEN`, then to `gh auth token`. Every other token is decrypted from `secrets/forge/tofu/*.age` unless its override variable is set. The non-GitHub units hold empty scaffolds for now, ready to fill in.
 
-## Usage
+### Guarantees
 
-### Prerequisites
+- **Adopt, never recreate.** `for_each` import blocks pull existing repos into state. Only entries marked `existing = false` get created.
+- **`prevent_destroy = true`** on every repository resource, on every forge.
+- **`check` blocks** require every active repo to have a description. On GitHub they also validate workflow permissions and Actions secret sources.
+- **Forks stay unmanaged.** Leave them out of the repo maps.
 
-- [Nix](https://nixos.org/) with flakes enabled
-- A checkout of `infra-nixCfg-secrets` at `../../Cfgs/infra-nixCfg-secrets` relative to this repo, and its agenix key at `~/.ssh/agenix/id_ed25519` (override with `FORGE_TOFU_SECRETS_REPO` / `FORGE_TOFU_AGE_IDENTITY`). The GitLab, Codeberg, gitea.com and SourceHut tokens are decrypted from `secrets/forge/tofu/*.age`; set `GITLAB_TOKEN_DIVITMITTAL`, `CODEBERG_TOKEN_DIVITMITTAL`, `GITEA_TOKEN_DIVITMITTAL` or `SOURCEHUT_TOKEN_DIVITMITTAL` to use a different token
-- A GitHub token (`GITHUB_TOKEN_DIVITMITTAL`, `GITHUB_TOKEN`, or a `gh auth login` session)
+## Getting started
 
-### Development Environment
+Requirements:
 
-Enter the Nix devshell (provides `tofu`, `terragrunt`, `gh`, `nixd`, `alejandra`):
+- [Nix](https://nixos.org/) with flakes enabled.
+- A checkout of `infra-nixCfg-secrets` at `../../Cfgs/infra-nixCfg-secrets` and its agenix key at `~/.ssh/agenix/id_ed25519`. Use `FORGE_TOFU_SECRETS_REPO` / `FORGE_TOFU_AGE_IDENTITY` to point elsewhere.
 
 ```bash
-nix develop
-# or automatically via direnv:
-direnv allow
-```
+nix develop               # or: direnv allow
+                          # tofu, terragrunt, agenix, gh, glab, tea, hut, nixd, alejandra
 
-### Common Commands
-
-```bash
-# Plan changes inside one org unit
-cd orgs/DivitMittal # or any other orgs/DivitMittal-<Forge> directory
+cd orgs/DivitMittal       # or orgs/DivitMittal-<Forge>
 terragrunt plan
-
-# Apply changes
 terragrunt apply
 
-# Plan/apply every org unit at once
-terragrunt run --all plan
-
-# Format all Nix and Terraform/OpenTofu files
-nix fmt
-
-# Run pre-commit checks (formatters, secret detection, etc.)
-nix flake check
-
-# Regenerate .github/workflows/ from flake/actions/
-nix run .#render-workflows
+terragrunt run --all plan # every unit, from the repo root
+nix fmt                   # format Nix + HCL
+nix flake check           # pre-commit hooks + state-encryption test
 ```
 
-### Adding a New Repository
+Always run `terragrunt`, never `tofu` directly. Terragrunt generates `backend.tf`, `versions.tf`, `provider.tf` and `locals.tf.json`, all git-ignored.
 
-1. Add an entry to `locals.repos` in the relevant `terranix/orgs/<Org>[-<Forge>].nix`:
+## Adding a repository
+
+Add an entry to `locals.repos` in `terranix/orgs/<Org>[-<Forge>].nix`, then run `terragrunt plan`:
 
 ```nix
 "my-new-repo" = {
   description = "What this repo is for";
-  visibility = "public";
-  topics = ["nix" "example"]; # GitHub/GitLab only
-  delete_branch_on_merge = true; # GitHub/GitLab only
-  existing = false; # omit or set true for pre-existing repos
+  visibility = "public";          # SourceHut: public | unlisted | private
+  topics = ["nix" "example"];     # GitHub, GitLab
+  delete_branch_on_merge = true;  # GitHub, GitLab
+  existing = false;               # omit for repos that already exist (they get imported)
 };
 ```
 
-2. If adopting a **pre-existing** repo, rely on the `for_each` import block in that org's `main.tf` (repos with `existing = true` are imported automatically).
+Each forge supports a different set of fields:
 
-3. If branch protection is needed, add the repo + branch to `locals.protected_branches` in the same Terranix file (not supported on SourceHut).
+| Field                                           | GitHub | GitLab | Codeberg / gitea.com | SourceHut |
+| ----------------------------------------------- | :----: | :----: | :------------------: | :-------: |
+| `description`, `visibility`, `existing`         |   ✓    |   ✓    |          ✓           |     ✓     |
+| `topics`, `delete_branch_on_merge`              |   ✓    |   ✓    |                      |           |
+| `homepage_url`                                  |   ✓    |        |          ✓           |           |
+| `archived`, `has_issues`                        |   ✓    |   ✓    |          ✓           |           |
+| `workflow_permissions`, `actions_can_create_prs`|   ✓    |        |                      |           |
+| `locals.protected_branches` (`{ branch = … }`)  |        |   ✓    |          ✓           |           |
 
-4. Verify and apply:
+GitLab `visibility` also accepts `"internal"`. A ready-made `modules/branch-protection` exists for GitHub but the `DivitMittal` unit doesn't use it yet.
 
-```bash
-terragrunt plan
-terragrunt apply
-```
+To see the compiled JSON: `nix build .#divitmittal-locals --print-out-paths | xargs cat | jq`. Other units have matching packages, e.g. `.#divitmittal-gitlab-locals`.
 
-### Managing GitHub Actions Environments
+## GitHub Actions environments
 
-`locals.actions_environments` in `terranix/orgs/DivitMittal.nix` maps `repo -> environment -> config`. Each secret maps a GitHub secret name to a logical source key; `orgs/DivitMittal/terragrunt.hcl` maps that key to an age file under `infra-nixCfg-secrets/secrets/`, which `scripts/read-actions-secret` decrypts at plan/apply time:
+`locals.actions_environments` in `terranix/orgs/DivitMittal.nix` maps `repo → environment → config`. Each secret names a **source key**. `orgs/DivitMittal/terragrunt.hcl` maps that key to an age file in `infra-nixCfg-secrets`:
 
 ```nix
 "infra-nixCfg".dev = {
-  existing = true;                                   # import the live environment instead of creating it
-  secrets.CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
-  pending_secrets.ATTIC_DARWIN_TOKEN = "infra_nixcfg_attic_darwin_token";
-  variables = {};                                    # plaintext, public values only
+  existing = true;                                    # import, don't create (default)
+  secrets.TS_OAUTH_SECRET = "infra_nixcfg_ts_oauth_secret";
+  pending_secrets.CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
+  variables = {};                                     # plaintext, public values only
   pending_variables = ["DARWIN_CACHE_PUBLIC_KEY"];
-  existing_variables = ["CACHE_ARTIFACT_RECIPIENT"]; # imported once declared in `variables`
+  existing_variables = ["CACHE_ARTIFACT_RECIPIENT"];  # imported once declared in `variables`
 };
 ```
 
 ```hcl
-# orgs/DivitMittal/terragrunt.hcl -> locals.actions_secret_sources
-infra_nixcfg_cachix_auth_token = "ci/infra-nixCfg/cachix_auth_token.age"
+# orgs/DivitMittal/terragrunt.hcl → locals.actions_secret_sources
+infra_nixcfg_ts_oauth_secret = "ci/infra-nixCfg/ts_oauth_secret.age"
 ```
 
-- **Adopting**: `existing = true` (the default) adds the environment to an import block, so the first `terragrunt apply` imports it rather than recreating it. Use `existing = false` only for environments forge-tofu should create.
-- **Secrets are write-only**: GitHub never returns a secret's value, so the first apply PUTs every declared secret from its age file and overwrites the live value. Encrypt the current value (or a freshly rotated one) before applying.
-- **Missing age files fail closed**: `read-actions-secret` exits non-zero when a source's age file is missing, which aborts the whole plan. `FORGE_TOFU_PLACEHOLDER_SECRETS=1` substitutes `PLACEHOLDER__MISSING_SECRET__*` values for offline rendering, but a precondition refuses to plan any secret resource with a placeholder, so a placeholder can never reach GitHub.
-- **Pending entries**: declare secrets or variables that do not have an age file or value yet under `pending_secrets` / `pending_variables`. They are only reported (`tofu output actions_environments_pending`), never created or deleted. To activate one, encrypt its age file, move it into `secrets` (or `variables` with its value), and add its path to `actions_secret_sources`.
-- **Existing variables**: the provider creates variables with a POST, which fails on a name that already exists. List such names in `existing_variables`; they are imported once they also appear in `variables`.
-- **Unmanaged names**: secrets and variables that are not declared are left alone. forge-tofu does not delete what it never managed.
+A secret moves through these states:
 
-## CI/CD
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Pending: declared in pending_secrets
+    Pending --> Managed: age file added, moved to secrets
+    Managed --> Managed: apply PUTs decrypted value
+    note right of Managed
+        Missing age file → plan fails closed.
+        FORGE_TOFU_PLACEHOLDER_SECRETS=1 renders
+        offline, but placeholders never reach GitHub.
+    end note
+```
 
-GitHub Actions workflows are **generated from Nix** (`flake/actions/`):
+- **Values are write-only.** GitHub never returns a secret's value, so the first apply overwrites the live one. Encrypt the current value, or a freshly rotated one, before you apply.
+- **Pending entries** are listed by `tofu output actions_environments_pending`. They are never created or deleted.
+- **Existing variables.** Creating a variable is a POST, and it fails (409) when the name already exists. List such names in `existing_variables` so they get imported instead.
+- **Undeclared secrets and variables** are left alone.
 
-| Workflow            | Trigger                                      | Purpose                                                            |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------ |
-| `flake-check`       | push/PR touching `flake.nix` or `flake.lock` | Runs `nix flake check`                                             |
-| `flake-lock-update` | weekly schedule                              | Auto-updates Nix inputs via `DeterminateSystems/update-flake-lock` |
+### Tailscale CI credentials
 
-### Personal Tailscale CI identity
+`DivitMittal/infra-nixCfg` owns the tailnet policy and creates the CI OAuth client. This repo only delivers that client's credentials to the `infra-nixCfg` `dev` environment. It never reads tailnet state or admin credentials.
 
-`DivitMittal/infra-nixCfg` owns the personal tailnet policy and the CI OAuth
-client through its Tailscale provider. This repository owns delivering that
-client's credentials to GitHub; it does not read the networking state.
+```mermaid
+sequenceDiagram
+    participant TS as infra-nixCfg<br/>(Tailscale provider)
+    participant S as infra-nixCfg-secrets
+    participant F as forge-tofu<br/>(DivitMittal unit)
+    participant GH as GitHub env<br/>infra-nixCfg/dev
+    TS->>S: tailscale-personal export-secrets<br/>ci/infra-nixCfg/ts_oauth_{client_id,secret}.age
+    F->>S: read-actions-secret (plan/apply)
+    F->>GH: TS_OAUTH_CLIENT_ID, TS_OAUTH_SECRET
+```
 
-After applying the tailnet configuration, its `tailscale-personal export-secrets`
-command writes `ci/infra-nixCfg/ts_oauth_client_id.age` and
-`ci/infra-nixCfg/ts_oauth_secret.age` directly into the private secrets checkout.
-Register their recipients in the secrets manifest and commit the encrypted
-files. Then move `TS_OAUTH_CLIENT_ID` and `TS_OAUTH_SECRET` from
-`pending_secrets` to `secrets`, uncomment their two `actions_secret_sources`,
-and review a forge plan before applying. No tailnet administrator credential
-is sent to GitHub, and no shared Terraform state is needed.
+After you rotate the client, re-run `export-secrets`, commit the age files, then plan and apply this unit.
 
-Other existing environment secrets remain pending until their encrypted
-sources are available. Pending entries leave existing GitHub values intact
-and do not block unrelated repository plans.
+## Encrypted state (GitHub unit)
 
-### Encrypted GitHub state and Tailscale delivery
+`orgs/DivitMittal` encrypts its state and saved plans with PBKDF2 + AES-GCM, enforced. The passphrase is decrypted at runtime from `forge/tofu/github-state-passphrase.age`. Keep that file safe: without it the state can't be recovered. `nix flake check` runs `tests/check-state-encryption.py` to confirm encryption is still enforced.
 
-The DivitMittal GitHub unit now receives the dedicated Tailscale CI OAuth
-pair from `ci/infra-nixCfg/ts_oauth_{client_id,secret}.age`. Other unavailable
-sources remain pending. The client is created by infra-nixCfg's provider;
-this unit only delivers its credentials to the existing `dev` environment.
+To migrate old plaintext state once, back it up as an age file first, then run with `FORGE_TOFU_ALLOW_PLAINTEXT_STATE_MIGRATION=true`. That allows reading plaintext state while every write stays encrypted. Remove the flag afterwards. The other forge units keep plain local state.
 
-State and saved plans for this unit use enforced PBKDF2/AES-GCM encryption.
-The passphrase is decrypted at runtime from
-`forge/tofu/github-state-passphrase.age`, separately from GitHub secrets.
-Retain that encrypted input for state recovery. Existing plaintext state
-must be backed up to age encryption before migration. For that one-time
-migration only, `FORGE_TOFU_ALLOW_PLAINTEXT_STATE_MIGRATION=true` permits
-reading old plaintext state while all writes and saved plans use encryption.
-Remove the flag after migration; the default rejects plaintext state.
-This setting does not change the other forge units.
+## CI
+
+The workflows are generated from `flake/actions/` by actions-nix. Its `render-actions` pre-commit hook re-renders `.github/workflows/*.yml` on every commit, so don't edit those files by hand.
+
+| Workflow            | Trigger                                                                                                 | Does                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `flake-check`       | push/PR to `main` touching `flake.nix`, `flake.lock`, `flake/**`, `modules/**`, `orgs/**`; manual       | `nix flake check --all-systems --no-build`       |
+| `flake-lock-update` | first Sunday of each month; manual                                                                      | PR from `DeterminateSystems/update-flake-lock`   |
