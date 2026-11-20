@@ -92,7 +92,7 @@ generate "encryption" {
 
 inputs = {
   tofu_state_passphrase = run_cmd("--terragrunt-quiet", "${get_repo_root()}/scripts/read-actions-secret", "tofu_state_passphrase", "forge/tofu/github-state-passphrase.age")
-  github_token = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
+  github_token          = get_env("GITHUB_TOKEN_DIVITMITTAL", get_env("GITHUB_TOKEN", run_cmd("--terragrunt-quiet", "gh", "auth", "token")))
 
   github_actions_secret_values = {
     for name, path in local.actions_secret_sources :
