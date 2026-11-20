@@ -10,3 +10,14 @@ variable "github_actions_secret_values" {
   sensitive   = true
   default     = {}
 }
+
+variable "tofu_state_passphrase" {
+  description = "Runtime-decrypted encryption key for this GitHub unit's state and plans."
+  type        = string
+  sensitive   = true
+  nullable    = false
+  validation {
+    condition     = length(var.tofu_state_passphrase) >= 32
+    error_message = "Use a persistent state passphrase of at least 32 characters."
+  }
+}

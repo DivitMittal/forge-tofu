@@ -188,3 +188,20 @@ is sent to GitHub, and no shared Terraform state is needed.
 Other existing environment secrets remain pending until their encrypted
 sources are available. Pending entries leave existing GitHub values intact
 and do not block unrelated repository plans.
+
+### Encrypted GitHub state and Tailscale delivery
+
+The DivitMittal GitHub unit now receives the dedicated Tailscale CI OAuth
+pair from `ci/infra-nixCfg/ts_oauth_{client_id,secret}.age`. Other unavailable
+sources remain pending. The client is created by infra-nixCfg's provider;
+this unit only delivers its credentials to the existing `dev` environment.
+
+State and saved plans for this unit use enforced PBKDF2/AES-GCM encryption.
+The passphrase is decrypted at runtime from
+`forge/tofu/github-state-passphrase.age`, separately from GitHub secrets.
+Retain that encrypted input for state recovery. Existing plaintext state
+must be backed up to age encryption before migration. For that one-time
+migration only, `FORGE_TOFU_ALLOW_PLAINTEXT_STATE_MIGRATION=true` permits
+reading old plaintext state while all writes and saved plans use encryption.
+Remove the flag after migration; the default rejects plaintext state.
+This setting does not change the other forge units.
