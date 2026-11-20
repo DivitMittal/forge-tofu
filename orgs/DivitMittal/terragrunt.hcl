@@ -46,6 +46,18 @@ locals {
     awesome_codeberg_token = "forge/codeberg.age"
     awesome_gitea_token    = "forge/gitea.age"
     awesome_gitlab_token   = "forge/gitlab.age"
+
+    # infra-nixCfg `dev` environment. ATTIC_TOKEN is the T2/T3 push token.
+    infra_nixcfg_attic_token        = "homelab/attic-push.age"
+    infra_nixcfg_cachix_auth_token  = "ci/infra-nixCfg/cachix_auth_token.age"
+    infra_nixcfg_pat                = "ci/infra-nixCfg/pat.age"
+    infra_nixcfg_ssh_private_key    = "ci/infra-nixCfg/ssh_private_key.age"
+    infra_nixcfg_ts_oauth_client_id = "ci/infra-nixCfg/ts_oauth_client_id.age"
+    infra_nixcfg_ts_oauth_secret    = "ci/infra-nixCfg/ts_oauth_secret.age"
+    # Pending (see pending_secrets in terranix/orgs/DivitMittal.nix): a listed
+    # source whose age file is missing aborts the plan, so uncomment only after
+    # the file is encrypted.
+    # infra_nixcfg_attic_darwin_token = "ci/infra-nixCfg/attic_darwin_token.age"
   }
 }
 

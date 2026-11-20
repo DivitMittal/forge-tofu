@@ -374,5 +374,38 @@ in {
         variables = {};
       };
     };
+
+    ## infra-nixCfg's CI environment. It existed long before forge-tofu, so it
+    ## is imported (`existing = true`) rather than created; its settings match
+    ## the module defaults, so adoption is a no-op on the environment itself.
+    ## Applying overwrites each live secret with its decrypted age file, so the
+    ## age files must hold the current values (or freshly rotated ones).
+    "infra-nixCfg" = {
+      dev = {
+        existing = true;
+        secrets = {
+          ATTIC_TOKEN = "infra_nixcfg_attic_token";
+          CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
+          PAT = "infra_nixcfg_pat";
+          SSH_PRIVATE_KEY = "infra_nixcfg_ssh_private_key";
+          TS_OAUTH_CLIENT_ID = "infra_nixcfg_ts_oauth_client_id";
+          TS_OAUTH_SECRET = "infra_nixcfg_ts_oauth_secret";
+        };
+        ## Declared but not managed until their age files exist: a source
+        ## without an age file fails the whole plan, so move each entry into
+        ## `secrets` (and its path into terragrunt.hcl) once it is encrypted.
+        pending_secrets = {
+          ATTIC_DARWIN_TOKEN = "infra_nixcfg_attic_darwin_token";
+        };
+        ## Both values are public (an age recipient and a Nix signing key),
+        ## so they live in plaintext here once known. Until then the live
+        ## variables stay unmanaged and untouched.
+        variables = {};
+        pending_variables = ["CACHE_ARTIFACT_RECIPIENT" "DARWIN_CACHE_PUBLIC_KEY"];
+        ## Already set on GitHub: imported, not created, once moved into
+        ## `variables` (creating an existing variable is a 409).
+        existing_variables = ["CACHE_ARTIFACT_RECIPIENT"];
+      };
+    };
   };
 }

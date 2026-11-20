@@ -134,6 +134,33 @@ terragrunt plan
 terragrunt apply
 ```
 
+### Managing GitHub Actions Environments
+
+`locals.actions_environments` in `terranix/orgs/DivitMittal.nix` maps `repo -> environment -> config`. Each secret maps a GitHub secret name to a logical source key; `orgs/DivitMittal/terragrunt.hcl` maps that key to an age file under `infra-nixCfg-secrets/secrets/`, which `scripts/read-actions-secret` decrypts at plan/apply time:
+
+```nix
+"infra-nixCfg".dev = {
+  existing = true;                                   # import the live environment instead of creating it
+  secrets.CACHIX_AUTH_TOKEN = "infra_nixcfg_cachix_auth_token";
+  pending_secrets.ATTIC_DARWIN_TOKEN = "infra_nixcfg_attic_darwin_token";
+  variables = {};                                    # plaintext, public values only
+  pending_variables = ["DARWIN_CACHE_PUBLIC_KEY"];
+  existing_variables = ["CACHE_ARTIFACT_RECIPIENT"]; # imported once declared in `variables`
+};
+```
+
+```hcl
+# orgs/DivitMittal/terragrunt.hcl -> locals.actions_secret_sources
+infra_nixcfg_cachix_auth_token = "ci/infra-nixCfg/cachix_auth_token.age"
+```
+
+- **Adopting**: `existing = true` (the default) adds the environment to an import block, so the first `terragrunt apply` imports it rather than recreating it. Use `existing = false` only for environments forge-tofu should create.
+- **Secrets are write-only**: GitHub never returns a secret's value, so the first apply PUTs every declared secret from its age file and overwrites the live value. Encrypt the current value (or a freshly rotated one) before applying.
+- **Missing age files fail closed**: `read-actions-secret` exits non-zero when a source's age file is missing, which aborts the whole plan. `FORGE_TOFU_PLACEHOLDER_SECRETS=1` substitutes `PLACEHOLDER__MISSING_SECRET__*` values for offline rendering, but a precondition refuses to plan any secret resource with a placeholder, so a placeholder can never reach GitHub.
+- **Pending entries**: declare secrets or variables that do not have an age file or value yet under `pending_secrets` / `pending_variables`. They are only reported (`tofu output actions_environments_pending`), never created or deleted. To activate one, encrypt its age file, move it into `secrets` (or `variables` with its value), and add its path to `actions_secret_sources`.
+- **Existing variables**: the provider creates variables with a POST, which fails on a name that already exists. List such names in `existing_variables`; they are imported once they also appear in `variables`.
+- **Unmanaged names**: secrets and variables that are not declared are left alone. forge-tofu does not delete what it never managed.
+
 ## CI/CD
 
 GitHub Actions workflows are **generated from Nix** (`flake/actions/`):
