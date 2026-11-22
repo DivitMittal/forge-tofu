@@ -12,8 +12,14 @@
         common-actions
         ++ [
           {
-            name = "Run nix flake check";
+            name = "Evaluate flake for all systems";
             run = "nix -vL flake check --impure --all-systems --no-build";
+          }
+          {
+            # --no-build above only evaluates; this runs org-data,
+            # github-state-encryption and the pre-commit hooks.
+            name = "Build checks";
+            run = "nix -L flake check --impure";
           }
         ];
     };
