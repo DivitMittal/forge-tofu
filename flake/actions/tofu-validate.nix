@@ -1,7 +1,18 @@
 ## `tofu validate` for every org unit against its committed lock file. Needs no
 ## tokens or state, so it catches provider schema errors on every PR.
 ## tests/validate-org.py stands in for Terragrunt, whose inputs decrypt secrets.
-{common-actions, ...}: let
+{
+  common-actions,
+  lib,
+  ...
+}: let
+  units = {
+    DivitMittal = "divitmittal-locals";
+    DivitMittal-GitLab = "divitmittal-gitlab-locals";
+    DivitMittal-Codeberg = "divitmittal-codeberg-locals";
+    DivitMittal-Gitea = "divitmittal-gitea-locals";
+    DivitMittal-Sourcehut = "divitmittal-sourcehut-locals";
+  };
   paths = [
     "modules/**"
     "orgs/**"
@@ -24,40 +35,20 @@ in {
     };
     jobs.validating-tofu = {
       permissions.contents = "read";
-      strategy = {
-        fail-fast = false;
-        matrix.unit = [
-          {
-            org = "DivitMittal";
-            package = "divitmittal-locals";
-          }
-          {
-            org = "DivitMittal-GitLab";
-            package = "divitmittal-gitlab-locals";
-          }
-          {
-            org = "DivitMittal-Codeberg";
-            package = "divitmittal-codeberg-locals";
-          }
-          {
-            org = "DivitMittal-Gitea";
-            package = "divitmittal-gitea-locals";
-          }
-          {
-            org = "DivitMittal-Sourcehut";
-            package = "divitmittal-sourcehut-locals";
-          }
-        ];
-      };
       steps =
         common-actions
         ++ [
           {
-            name = "Validate \${{ matrix.unit.org }}";
+            ## One job for all units: a matrix of five Nix jobs trips the
+            ## GitHub Actions cache rate limit (magic-nix-cache).
+            name = "Validate every org unit";
             run = ''
               set -euo pipefail
-              locals="$(nix build --no-link --print-out-paths '.#''${{ matrix.unit.package }}')"
-              nix develop -c python3 tests/validate-org.py . '${"$"}{{ matrix.unit.org }}' "$locals" "$RUNNER_TEMP/validate"
+              for unit in ${lib.concatStringsSep " " (lib.mapAttrsToList (org: pkg: "${org}:${pkg}") units)}; do
+                org="''${unit%%:*}"
+                locals="$(nix build --no-link --print-out-paths ".#''${unit#*:}")"
+                nix develop -c python3 tests/validate-org.py . "$org" "$locals" "$RUNNER_TEMP/validate-$org"
+              done
             '';
           }
         ];

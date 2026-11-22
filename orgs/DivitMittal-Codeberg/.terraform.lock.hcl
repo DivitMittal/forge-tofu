@@ -5,6 +5,9 @@ provider "registry.opentofu.org/go-gitea/gitea" {
   version     = "0.8.1"
   constraints = "~> 0.8"
   hashes = [
+    "h1:65BftDHlLg34wC9O+JKQbvSGkZSUKKMGS/lEcmnoJLE=",
+    "h1:QuWMmVxXmciorwE0J5N7FziuB6M/K1JXa03A/BFQo7k=",
+    "h1:XNsv5gFPCazNLLHA52qtRn84sDPx4Jj16uvJtddtkuE=",
     "h1:ctli4og4u9krKRQTUHlJhgQi7yJ2tBai/ZXUQtLyb6U=",
     "zh:00cd3e2d328cc7d8bd1ca0c62d6c7188e9f053a0cbe6d90a5708ea471c1719a2",
     "zh:051f2ac5619cb49ff2eb6a44b29d2b7eebc179328edc6e95bbdf5d8d5654cc96",

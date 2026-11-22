@@ -5,6 +5,9 @@ provider "registry.opentofu.org/gitlabhq/gitlab" {
   version     = "19.2.1"
   constraints = "~> 19.0"
   hashes = [
+    "h1:2wavipP8HnVmH1pu1OnbB3ufD3YX6oCP1xejfTQ/WiQ=",
+    "h1:Dc2fiVjSBgKMGQ2ALI6cYio644K+X4IDrCIf9jF4ja8=",
+    "h1:lLuwBmLHKLX1zepwqBxKsOqTMyEEAqwb2CKpR2neCUY=",
     "h1:vg5cYL093SkGwqI2yWjkgbP54dlcI3Nh/EhMHeezSrI=",
     "zh:0240c6e58b50340d20f4f080741200043a37bd981f81d9888f84b19a5d049ac2",
     "zh:0a3d49d9f1e8aa8e8ff631875bbbf8cadc14f0bdc0f6916056c1683ba3858863",

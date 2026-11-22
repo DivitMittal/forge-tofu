@@ -18,25 +18,14 @@ jobs:
       uses: nixbuild/nix-quick-install-action@master
     - name: Magic Nix Cache(Use GitHub Actions Cache)
       uses: DeterminateSystems/magic-nix-cache-action@main
-    - name: Validate ${{ matrix.unit.org }}
+    - name: Validate every org unit
       run: |-
         set -euo pipefail
-        locals="$(nix build --no-link --print-out-paths '.#${{ matrix.unit.package }}')"
-        nix develop -c python3 tests/validate-org.py . '${{ matrix.unit.org }}' "$locals" "$RUNNER_TEMP/validate"
-    strategy:
-      fail-fast: false
-      matrix:
-        unit:
-        - org: DivitMittal
-          package: divitmittal-locals
-        - org: DivitMittal-GitLab
-          package: divitmittal-gitlab-locals
-        - org: DivitMittal-Codeberg
-          package: divitmittal-codeberg-locals
-        - org: DivitMittal-Gitea
-          package: divitmittal-gitea-locals
-        - org: DivitMittal-Sourcehut
-          package: divitmittal-sourcehut-locals
+        for unit in DivitMittal:divitmittal-locals DivitMittal-Codeberg:divitmittal-codeberg-locals DivitMittal-GitLab:divitmittal-gitlab-locals DivitMittal-Gitea:divitmittal-gitea-locals DivitMittal-Sourcehut:divitmittal-sourcehut-locals; do
+          org="${unit%%:*}"
+          locals="$(nix build --no-link --print-out-paths ".#${unit#*:}")"
+          nix develop -c python3 tests/validate-org.py . "$org" "$locals" "$RUNNER_TEMP/validate-$org"
+        done
     timeout-minutes: 30
 'on':
   pull_request:
