@@ -13,6 +13,10 @@
           "flake/**"
           "modules/**"
           "orgs/**"
+          "terranix/**"
+          "tests/**"
+          "scripts/**"
+          "root.hcl"
         ];
       };
       pull_request = push;

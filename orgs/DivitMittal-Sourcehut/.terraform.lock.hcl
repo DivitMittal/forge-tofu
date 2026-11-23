@@ -5,7 +5,10 @@ provider "registry.opentofu.org/wombelix/sourcehut" {
   version     = "1.0.1"
   constraints = "~> 1.0"
   hashes = [
+    "h1:1kjYgGvfVQrkCEZfhHGKLQ6yGcGxQrbyPc8hY6UwqY8=",
+    "h1:WX0nakEOBSHrCBxRSbtdA98X0Gv5CTYIhR3HaZbzrhY=",
     "h1:lQMexbpV2aGfwPJxhxo+8jOyWOcNV1phvN5NzWYza6I=",
+    "h1:t2MVT39SKKLDlhE12m4rtnJY+QUjmk43yTAkPar45xM=",
     "zh:0501c143ac98502b484b93f1e70143521d352006cc5c7fe3cb1d284f06b6993c",
     "zh:0f37424aa9bafbad1291eb70d6ecc2f89dca593fa6281e75b51cac7c41c901d0",
     "zh:1c3e89cf19118fc07d7b04257251fc9897e722c16e0a0df7b07fcd261f8c12e7",
